@@ -267,8 +267,8 @@
                                                 </div>
                                                 <div class='mt-1'>
                                                     Số lượng mua:
-                                                    <input type='number' product_id='product-number' size='5' min="1" value="1">
-                                                    <button class='btn btn-success btn-sm mb-1' product_id='add-to-cart'>Thêm vào giỏ hàng</button>
+                                                    <input type='number' id='product-number' size='5' min="1" value="1">
+                                                    <button class='btn btn-success btn-sm mb-1' id='add-to-cart'>Thêm vào giỏ hàng</button>
                                                 </div>
                                                           
                                             </div> 

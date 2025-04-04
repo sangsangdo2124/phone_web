@@ -27,6 +27,7 @@ require __DIR__.'/auth.php';
 /*Route::get('/', function () {
     return view('welcome');
 });*/
+Route::get('/redirect',[HomeController::class,'redirect'] );
 
 Route::get('/','App\Http\Controllers\ProductsController@home'); //route hiện trang chủ
 
@@ -36,9 +37,11 @@ Route::get('/home/chitiet/{id}','App\Http\Controllers\ProductsController@chitiet
 
 Route::get('/order','App\Http\Controllers\ProductsController@order')->name('order');
 
-Route::post('/cart/add','App\Http\Controllers\BookProductsController@cartadd')->name('cartadd');
+Route::post('/cart/add','App\Http\Controllers\ProductsController@cartadd')->name('cartadd');
 
+Route::post('/cart/delete','App\Http\Controllers\ProductsController@cartdelete')->name('cartdelete');
 
-Route::get('/redirect',[HomeController::class,'redirect'] );
+Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate')
+->middleware('auth')->name('ordercreate');
 
 

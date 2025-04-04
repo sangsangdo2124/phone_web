@@ -182,7 +182,7 @@
                             <button class="btn btn-light">
                             <div style='color:white;position:relative' class='mr-2'>
                                     <div style='width:20px; height:20px;background-color:#000000; font-size:12px; border:none;
-                                    border-radius:50%; position:absolute;right:2px;top:-2px' product_id='cart-number-product'>
+                                    border-radius:50%; position:absolute;right:2px;top:-2px' id='cart-number-product'>
                                     @if (session('cart'))
                                     {{ count(session('cart')) }}
                                     @else

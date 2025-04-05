@@ -93,7 +93,7 @@
 						<div class="col-md-3">
 							<div class="header-logo">
 								<a href="#" class="logo">
-                                    <img src="{{ asset('image/logo.png') }}" alt="Logo">
+                                    <img src="{{ asset('img/logo.png') }}" alt="Logo">
 								</a>
 							</div>
 						</div>
@@ -331,3 +331,48 @@
 
 
 
+	<script type="text/javascript">
+  $(document).ready(function() {
+    // Kích hoạt dropdown khi nhấp vào
+    $('.dropdown-toggle').dropdown();
+  });
+</script>
+<style>
+/* Tùy chỉnh dropdown đăng nhập*/
+.dropdown-menu {
+    background-color: #333;
+    border: 2px solid #D10024
+    border-radius: 5px;
+    padding: 10px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Màu chữ và hover của item trong dropdown */
+.dropdown-menu li a {
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #ff666f;
+    color: white;
+}
+
+/* Kích thước của dropdown */
+.dropdown-toggle {
+    font-size: 18px;
+}
+
+/* Thêm hiệu ứng cho dropdown */
+.dropdown-menu {
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+}
+</style>

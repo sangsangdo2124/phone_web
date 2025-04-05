@@ -10,7 +10,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div id="hot-deal">
-							<img src="../image/banner.png" alt="Hot Deal" style="width: 100%; height: 500px;">
+							<img src="../img/banner.png" alt="Hot Deal" style="width: 100%; height: 500px;">
 						</div>
 					</div>
 				</div>

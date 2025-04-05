@@ -10,7 +10,6 @@ use App\Models\Book;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Product;  // Model Product
-use Illuminate\Http\Request;
 use App\Models\PhanLoai;
 
 class HomeController extends Controller
@@ -25,8 +24,7 @@ class HomeController extends Controller
         }
         else 
         {
-            //$data = DB::select("select * from san_pham order by gia_ban");-->
-            return view("pages.home");
+            return $this->index();
            
         }
     }

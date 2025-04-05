@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +20,8 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
-Route::get('/','App\Http\Controllers\ProductsController@home'); //route hiện trang chủ
+Route::get('/','App\Http\Controllers\HomeController@home'); //route hiện trang chủ
+
+
+Route::get('/', [HomeController::class, 'index']);  // Hiển thị sản phẩm mới nhất
+Route::get('/category/{categoryId}', [CategoryController::class, 'show']);  // Hiển thị sản phẩm theo danh mục

@@ -12,4 +12,10 @@ class Product extends Model
         protected $primaryKey = "id";
         public $timestamps = false;
 
+        //Mối quan hệ với bảng PhanLoai
+        public function phanLoai()
+        {
+                return $this->belongsTo(PhanLoai::class, 'id_phan_loai');
+        }
+
 }

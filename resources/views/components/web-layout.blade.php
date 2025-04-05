@@ -1,228 +1,378 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EGO MOBILE</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!--thư viện dùng cái icon -->
-    <style>
-        
-        .text-white{
-            text-decoration: none; /*tắt gạch chân ở các thẻ text white*/
-        }
-        .navbar {
-            background-color: /*#dc3545*/  #f72c0f;
-            color: white;
-            height: 20px;
-        }
-        .search-bar {
-            max-width: 300px;
-        }
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-        .icon-large {
-            color: white; /* Màu trắng */
-        }
+		<title>{{$title}}</title>
 
-        .btn-light {
-            background-color: #ff6666; /* Màu đỏ nhạt */
-            color: white;
-            border-radius: 10px;
-            font-weight: bold;
-            padding: 10px;
-        }
+		<!-- Google font -->
+		<link href="https://fonts.googleapis.com/css?family=Inter:400,500,700" rel="stylesheet"> <!--font inter-->
 
-        .btn-light:hover {
-        background-color: #ff4444; /* Màu đậm hơn khi hover */
-        }
+		<!-- Bootstrap -->
+		 <!-- CSS Bootstrap 3.3.7 -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-        /* Định dạng menu danh mục */
-        .category-menu {
-            display: flex;
-            gap: 20px;
-            padding: 0px 20px;
-        }
-        .category-menu li {
-            list-style: none;
-        }
-        .category-menu a {
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            margin-right: 15px;
-        }
-        
-    /*CSS cho footer*/
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+		<!-- JavaScript Bootstrap 3.3.7 (jQuery cần được thêm trước)-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-        .footer-links {
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            max-width: 1200px;
-            margin-bottom: 20px;
-        }
+		<!-- Slick -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
 
-        .footer-links div {
-            flex: 1;
-            margin: 0 10px;
-        }
+		<!-- nouislider-->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.css">
 
-        .footer-links a {
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            margin: 5px 0;
-			transition: color 0.3s;
-        }
+		<!-- Font Awesome Icon-->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-		.footer-links a:hover {
-            color: #f39c12; /* Màu khi di chuột qua */
-        }
-		.footer-links a:active {
-            color: #d35400; /* Màu khi nhấn vào */
-        }
-        .subscribe {
-            text-align: center;
-        }
+		<!-- Custom CSS stlylesheet -->
+		<link type="text/css" rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-        .subscribe input[type="email"] {
-            padding: 10px 15px;
-            width: 200px;
-			border: none;
-			margin-bottom: 20px;
-        }
+    </head>
+	<body>
+		<!-- HEADER -->
+		<header>
+			<!-- TOP HEADER -->
+			<div id="top-header">
+				<div class="container">
+					<ul class="header-links pull-left">
+						<li><a href="#"><i class="fa fa-phone"></i> +12-0000-1100</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i> egomobile12@gmail.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i> 56 Hoàng Diệu 2</a></li>
+					</ul>
 
-        .subscribe button {
-            padding: 10px 15px;
-            background-color:rgb(243, 93, 18);
-            border: none;
-            color: #fff;
-			height: 40px;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg p-3" style="background-color: #f72c0f !important">
-            <div class="container-fluid">
-                <span class="me-auto">Chúc buổi sáng vui vẻ, Bạn cần thông tin gì hôm nay?</span>
-                <span>Email hỗ trợ: <a href="mailto:nhom5@gmail.com" class="text-white">abc999@gmail.com</a></span>
-                <a href="#" class="text-white ms-3">Đăng nhập / Đăng ký</a>
-            </div>
-        </nav>
-            <!--HEADER-->
-            <div class="container-fluid bg-danger text-white py-3 text-center" style="
-            background-color: #f72c0f !important;!i;!;">
-                <div class="container-fluid">
-                    <div class="row align-items-center">
-                    
-                        <!-- Nhóm Logo & Tiêu đề -->
-                        <div class="col-md-3 text-center">
-                            <h1 class="fw-bold">EGO MOBILE</h1>
-                            <p>Siêu thị điện thoại số 1 Việt Nam</p>
-                        </div>
+					<ul class="header-links pull-right">
+            <!-- Dropdown chọn ngôn ngữ -->
+            <li class="list-inline-item dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-globe"></i> <span id="selected-language">Tiếng Việt</span>
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item language-option" href="#" data-lang="en">🇺🇸 English</a><br>
+                <a class="dropdown-item language-option" href="#" data-lang="vi">🇻🇳 Tiếng Việt</a>
+              </div>
+            </li>
 
-                        <!--Thanh tìm kiếm-->
-                        <div class="col-md-6 d-flex justify-content-center">
-                            <input type="text" class="form-control search-bar" placeholder="Bạn cần tìm gì?">
-                            <button class="btn btn-light ms-2">Tìm kiếm</button>
-                        </div>
-
-                        <!-- Nhóm nút đặt hàng, hệ thống, giỏ hàng-->
-                        <div class="col-md-3 d-flex justify-content-center align-items-center">
-                            <button class="btn btn-light me-2">
-                                    <span class="material-icons">call</span>
-                            </button>
-
-                            <button class="btn btn-light me-2">
-                                <span class="material-icons">store</span><br>
-                            </button> 
-
-                            <button class="btn btn-light">
-                                <span class="material-icons">shopping_cart</span><br>
-                            </button>
-                        </div>
+            <!-- Kiểm tra trạng thái đăng nhập -->
+            @auth
+            <li class="list-inline-item dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-user-o"></i> {{ Auth::user()->name }}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Lịch sử mua hàng</a></li>
+                <li>
+                  <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); this.closest('form').submit();">Đăng xuất</a>
+                  </form>
+                </li>
+              </ul>
+            </li>
+            @else
+            <li><a href="{{ route('login') }}"><i class="fa fa-sign-in"></i> Đăng nhập</a></li>
+            <li><a href="{{ route('register') }}"><i class="fa fa-user-plus"></i> Đăng ký</a></li>
+            @endauth
+          </ul>
 
 
+				</div>
+			</div>
+			<!-- /TOP HEADER -->
 
+			<!-- MAIN HEADER -->
+			<div id="header">
+				<!-- container -->
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<!-- LOGO -->
+						<div class="col-md-3">
+							<div class="header-logo">
+								<a href="#" class="logo">
+                                    <img src="{{ asset('img/logo.png') }}" alt="Logo">
+								</a>
+							</div>
+						</div>
+						<!-- /LOGO -->
+
+						<!-- SEARCH BAR -->
+						<div class="col-md-6">
+							<div class="header-search">
+								<form>
+									<select class="input-select">
+										<option value="0">All Categories</option>
+										<option value="1">Category 01</option>
+										<option value="2">Category 02</option>
+									</select>
+									<input class="input" placeholder="Bạn cần tìm gì?">
+									<button class="search-btn">Tìm kiếm</button>
+								</form>
+							</div>
+						</div>
+						<!-- /SEARCH BAR -->
+
+						<!-- ACCOUNT -->
+						<div class="col-md-3 clearfix">
+							<div class="header-ctn">
+								<!--Danh sách yêu thích -->
+								<div>
+									<a href="#">
+										<i class="fa fa-heart-o"></i>
+										<span>Yêu thích</span>
+										<div class="qty">0<!--code để lấy số lượng--></div>
+									</a>
+								</div>
+								<!-- /Danh sách yêu thích -->
+
+								<!-- Cart -->
+                <div class="dropdown">
+                  <a class="dropdown-toggle" href="{{ route('order') }}">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span>Giỏ hàng</span>
+                    <div class="qty">
+                      @if (session('cart'))
+                        {{ count(session('cart')) }}
+                      @else
+                        0
+                      @endif
                     </div>
+                  </a>
                 </div>
-            </div>
+                <!-- /Cart -->
+
+								<!-- Menu Toogle -->
+								<div class="menu-toggle">
+									<a href="#">
+										<i class="fa fa-bars"></i>
+										<span>Menu</span>
+									</a>
+								</div>
+								<!-- /Menu Toogle -->
+							</div>
+						</div>
+						<!-- /ACCOUNT -->
+					</div>
+					<!-- row -->
+				</div>
+				<!-- container -->
+			</div>
+			<!-- /MAIN HEADER -->
+		</header>
+		<!-- /HEADER -->
+
+		<!-- NAVIGATION -->
+		<nav id="navigation">
+			<!-- container -->
+			<div class="container">
+				<!-- responsive-nav -->
+				<div id="responsive-nav">
+					<!-- NAV -->
+					<ul class="main-nav nav navbar-nav">
+						<li class="active"><a href="#">Trang chủ</a></li>
+						<li><a href="#">Sản phẩm</a></li>
+						<li><a href="#">Thương hiệu</a></li>
+						<li><a href="#">Phụ kiện công nghệ</a></li>
+					</ul>
+					<!-- /NAV -->
+				</div>
+				<!-- /responsive-nav -->
+			</div>
+			<!-- /container -->
+		</nav>
+		<!-- /NAVIGATION -->
+
+		<!-- BREADCRUMB -->
+		<!-- /BREADCRUMB -->
+
+		<!-- SECTION -->
+		<div class="section">
+         {{$slot}}
+		</div>
+		<!-- /SECTION -->
+
+		<!-- NEWSLETTER -->
+		<div id="newsletter" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<div class="newsletter">
+							<p>Đăng ký để nhận thông tin <strong>KHUYẾN MÃI</strong></p>
+							<form>
+								<input class="input" type="email" placeholder="Nhập email của bạn">
+								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Đăng ký</button>
+							</form>
+							<ul class="newsletter-follow">
+								<li>
+									<a href="#"><i class="fa fa-facebook"></i></a>
+								</li>
+								<li>
+									<a href="#"><i class="fa fa-twitter"></i></a>
+								</li>
+								<li>
+									<a href="#"><i class="fa fa-instagram"></i></a>
+								</li>
+								<li>
+									<a href="#"><i class="fa fa-pinterest"></i></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /NEWSLETTER -->
+
+		<!-- FOOTER -->
+		<footer id="footer">
+			<!-- top footer -->
+			<div class="section">
+				<!-- container -->
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Liên hệ</h3>
+								<ul class="footer-links">
+									<li><a href="#"><i class="fa fa-map-marker"></i>56 Hoàng Diệu 2</a></li>
+									<li><a href="#"><i class="fa fa-phone"></i>+12-0000-1100</a></li>
+									<li><a href="#"><i class="fa fa-envelope-o"></i>egomobile12@gmail.com</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Danh mục nổi bật</h3>
+								<ul class="footer-links">
+									<li><a href="#">Laptops</a></li>
+									<li><a href="#">Điện thoại</a></li>
+									<li><a href="#">Phụ kiện</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="clearfix visible-xs"></div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Về chúng tôi</h3>
+								<ul class="footer-links">
+									<li><a href="#">Giới thiệu </a></li>
+									<li><a href="#">Chính sách</a></li>
+									<li><a href="#">Lịch sử hình thành</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Hỗ trợ</h3>
+								<ul class="footer-links">
+									<li><a href="#">Tài khoản</a></li>
+									<li><a href="#">Giỏ hàng </a></li>
+									<li><a href="#">Danh sách yêu thích</a></li>
+									<li><a href="#">Tư vấn</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- /row -->
+				</div>
+				<!-- /container -->
+			</div>
+			<!-- /top footer -->
+
+			<!-- bottom footer -->
+			<div id="bottom-footer" class="section">
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<ul class="footer-payments">
+								<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
+								<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
+							</ul>
+
+							<span class="copyright">
+                                Copyright &copy; {{ date('Y') }} All rights reserved | <a href="{{ url('/') }}">EGO - NHÓM 12 - PHÁT TRIỂN ỨNG DỤNG MÃ NGUỒN MỞ</a>
+                            </span>
+
+						</div>
+					</div>
+						<!-- /row -->
+				</div>
+				<!-- /container -->
+			</div>
+			<!-- /bottom footer -->
+		</footer>
+		<!-- /FOOTER -->
+		<!-- jQuery Plugins --> 
+		<!-- Nhúng các file JS từ thư mục public/js -->
+            <script src="{{ asset('js/jquery.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/slick.min.js') }}"></script>
+            <script src="{{ asset('js/nouislider.min.js') }}"></script>
+            <script src="{{ asset('js/jquery.zoom.min.js') }}"></script>
+            <script src="{{ asset('js/main.js') }}"></script>
+    <!---->
 
 
-            <!-- Danh mục sản phẩm -->
-            <div class="container-fluid bg-danger text-white py-2" style="
-                            background-color: #f72c0f !important;!i;!;">
-                <ul class="navbar-nav w-100 d-flex flex-row justify-content-start category-menu">
-                    <li class="nav-item active">
-                        <a class="nav-link text-white" href="#">Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">IPhone</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Samsung</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Xiaomi</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Oppo</a>
-                    </li>
-                </ul>
-            </div>
-    </header>
 
-    <!--dùng x-slot-->
-    <main style="max-width: 1200px; width: 90%; margin: 20px auto;">
-        <div class='row'>
-            <div class='col-12'>
-                {{$slot}}
-            </div>
-        </div>
-    </main>
+	<script type="text/javascript">
+  $(document).ready(function() {
+    // Kích hoạt dropdown khi nhấp vào
+    $('.dropdown-toggle').dropdown();
+  });
+</script>
+<style>
+/* Tùy chỉnh dropdown đăng nhập*/
+.dropdown-menu {
+    background-color: #333;
+    border: 2px solid #D10024
+    border-radius: 5px;
+    padding: 10px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
+/* Màu chữ và hover của item trong dropdown */
+.dropdown-menu li a {
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+}
 
+.dropdown-menu li a:hover {
+    background-color: #ff666f;
+    color: white;
+}
 
-    <footer>
-        <div class="footer-links">
-            <div>
-                <h3>VỀ CHÚNG TÔI </h3>
-                <a href="#">Lịch sử hình thành</a>
-                <a href="#">Đội ngũ</a>
-                <a href="#">Thương hiệu</a>
-            </div>
-            <div>
-                <h3>CHÍNH SÁCH BÁN HÀNG</h3>
-                <a href="#">Chính sách đổi trả</a>
-                <a href="#">Chính sách bảo hành</a>
-                <a href="#">Thương hiệu</a>
-            </div>
-            <div>
-                <h3>THEO DÕI CHÚNG TÔI</h3>
-                <a href="#">Theo dõi trên Fanpage</a>
-                <a href="#">Theo dõi trên Twitter</a>
-                <a href="#">Theo dõi trên Instagram</a>
-            </div>
-        </div>
-        <div class="subscribe">
-            <h3 style="text-align: left;">Nhận tin khuyến mãi</h3>
-            <input type="email" placeholder="Nhập email của bạn">
-            <button>Đăng ký</button>
-        </div>
-        <p>Copyright © 2025 NHÓM 9 MÃ NGUỒN MỞ</p>
-    </footer>
+/* Kích thước của dropdown */
+.dropdown-toggle {
+    font-size: 18px;
+}
 
+/* Thêm hiệu ứng cho dropdown */
+.dropdown-menu {
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!--javascripts của bootstrap-->
-</body>
-</html>
+.dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+}
+</style>

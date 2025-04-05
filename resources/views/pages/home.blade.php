@@ -2,6 +2,31 @@
     <x-slot name='title'>
         Trang chủ
     </x-slot>
+
+    <script>
+$(document).ready(function(){
+$(".add-product").click(function(){
+id = $(this).attr("sp_id");
+num = 1;
+$.ajax({
+type:"POST",
+dataType:"json",
+url: "{{route('cartadd')}}",
+data:{"_token": "{{ csrf_token() }}","id":id,"num":num},
+beforeSend:function(){
+},
+success:function(data){
+$("#cart-number-product").html(data);
+},
+error: function (xhr,status,error){
+},
+complete: function(xhr,status){
+}
+});
+});
+});
+</script>
+
 	<!-- HOT DEAL SECTION -->
 	<div id="hot-deal" class="section">
 			<!-- container -->
@@ -85,7 +110,10 @@
 													</div>
 													<div class="product-body">
 														<p class="product-category">{{ $collection->ten_loai_san_pham }}</p>
-														<h3 class="product-name"><a href="#">{{ $product->ten_san_pham }}</a></h3>
+
+                                                        
+
+														<h3 class="product-name"><a href="{{route('products', ['id' => $product->id])}}">{{ $product->ten_san_pham }}</a></h3>
 														<h4 class="product-price">
 															{{ number_format($product->gia_ban, 0, ',', '.') }} VND
 															@if($product->old_price)
@@ -105,7 +133,7 @@
 														</div>
 													</div>
 													<div class="add-to-cart">
-														<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+														<button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> add to cart</button>
 													</div>
 												</div>
 											@endforeach

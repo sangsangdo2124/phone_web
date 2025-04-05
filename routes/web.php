@@ -27,12 +27,15 @@ require __DIR__.'/auth.php';
 
 Route::get('/redirect',[HomeController::class,'redirect'] );
 
-Route::get('/', [HomeController::class, 'index']);  // Hiển thị sản phẩm mới nhất
+Route::get('/', [HomeController::class, 'index'])->name('index');  // Hiển thị sản phẩm mới nhất
 Route::get('/category/{categoryId}', [CategoryController::class, 'show']);  // Hiển thị sản phẩm theo danh mục
 
 Route::get('/giaodiendangnhap','App\Http\Controllers\ProductsController@giaodiendangnhap'); //route hiện giao diện đăng nhập
 
-Route::get('/home/chitiet/{id}','App\Http\Controllers\ProductsController@chitiet');// hiện chi tiết sản phẩm
+//Route::get('/home/chitiet/{id}','App\Http\Controllers\ProductsController@chitiet');// hiện chi tiết sản phẩm
+
+Route::get('/home/products/{id}','App\Http\Controllers\ProductsController@products')->name('products');// hiện chi tiết sản phẩm
+
 
 Route::get('/order','App\Http\Controllers\ProductsController@order')->name('order');
 

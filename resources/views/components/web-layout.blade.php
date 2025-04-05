@@ -45,19 +45,39 @@
 					</ul>
 
 					<ul class="header-links pull-right">
-						<!-- Dropdown chọn ngôn ngữ -->
-						<li class="list-inline-item dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<i class="fa fa-globe"></i> <span id="selected-language">Tiếng Việt</span>
-							</a>
-							<div class="dropdown-menu">
-								<a class="dropdown-item language-option" href="#" data-lang="en">🇺🇸 English</a><br>
-								<a class="dropdown-item language-option" href="#" data-lang="vi">🇻🇳 Tiếng Việt</a>
-							</div>
-						</li>
-					
-						<li><a href="#"><i class="fa fa-user-o"></i> Tài khoản </a></li>
-					</ul>
+            <!-- Dropdown chọn ngôn ngữ -->
+            <li class="list-inline-item dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-globe"></i> <span id="selected-language">Tiếng Việt</span>
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item language-option" href="#" data-lang="en">🇺🇸 English</a><br>
+                <a class="dropdown-item language-option" href="#" data-lang="vi">🇻🇳 Tiếng Việt</a>
+              </div>
+            </li>
+
+            <!-- Kiểm tra trạng thái đăng nhập -->
+            @auth
+            <li class="list-inline-item dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-user-o"></i> {{ Auth::user()->name }}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Lịch sử mua hàng</a></li>
+                <li>
+                  <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); this.closest('form').submit();">Đăng xuất</a>
+                  </form>
+                </li>
+              </ul>
+            </li>
+            @else
+            <li><a href="{{ route('login') }}"><i class="fa fa-sign-in"></i> Đăng nhập</a></li>
+            <li><a href="{{ route('register') }}"><i class="fa fa-user-plus"></i> Đăng ký</a></li>
+            @endauth
+          </ul>
+
 
 				</div>
 			</div>
@@ -86,7 +106,7 @@
 									<select class="input-select">
 										<option value="0">All Categories</option>
 										<option value="1">Category 01</option>
-										<option value="1">Category 02</option>
+										<option value="2">Category 02</option>
 									</select>
 									<input class="input" placeholder="Bạn cần tìm gì?">
 									<button class="search-btn">Tìm kiếm</button>
@@ -109,14 +129,20 @@
 								<!-- /Danh sách yêu thích -->
 
 								<!-- Cart -->
-								<div class="dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-										<i class="fa fa-shopping-cart"></i>
-										<span> Giỏ hàng </span>
-										<div class="qty">0<!--code để lấy số lượng--></div>
-									</a>
-								</div>
-								<!-- /Cart -->
+                <div class="dropdown">
+                  <a class="dropdown-toggle" href="{{ route('order') }}">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span>Giỏ hàng</span>
+                    <div class="qty">
+                      @if (session('cart'))
+                        {{ count(session('cart')) }}
+                      @else
+                        0
+                      @endif
+                    </div>
+                  </a>
+                </div>
+                <!-- /Cart -->
 
 								<!-- Menu Toogle -->
 								<div class="menu-toggle">
@@ -284,8 +310,6 @@
                                 Copyright &copy; {{ date('Y') }} All rights reserved | <a href="{{ url('/') }}">EGO - NHÓM 12 - PHÁT TRIỂN ỨNG DỤNG MÃ NGUỒN MỞ</a>
                             </span>
 
-
-
 						</div>
 					</div>
 						<!-- /row -->
@@ -303,8 +327,7 @@
             <script src="{{ asset('js/nouislider.min.js') }}"></script>
             <script src="{{ asset('js/jquery.zoom.min.js') }}"></script>
             <script src="{{ asset('js/main.js') }}"></script>
+    <!---->
 
 
-	</body>
-</html>
 

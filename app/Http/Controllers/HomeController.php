@@ -1,7 +1,13 @@
 <?php
 
-
 namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Book;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Product;  // Model Product
 use Illuminate\Http\Request;
@@ -9,9 +15,20 @@ use App\Models\PhanLoai;
 
 class HomeController extends Controller
 {
-    function home()
+    public function redirect()
     {
-        return view("pages.home");
+        $usertype = Auth::user()->usertype;
+
+        if($usertype == "1")
+        {
+        return view('admin.dashb'); // Trang admin
+        }
+        else 
+        {
+            //$data = DB::select("select * from san_pham order by gia_ban");-->
+            return view("pages.home");
+           
+        }
     }
     
     // Hiển thị sản phẩm mới nhất
@@ -26,4 +43,5 @@ class HomeController extends Controller
         // Truyền dữ liệu vào view
         return view('pages.home', compact('collections','groupedProducts','latestProducts'));
     }
+
 }

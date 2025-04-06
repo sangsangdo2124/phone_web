@@ -48,25 +48,28 @@
     </head>
     <body>
         <div class="wrapper-login">
-            <form action="" autocomplete="off" method="POST">
-            <table border = "1" class = "table-login" style = "text-align: center;border-collapse: collapse;">
-                <tr>
-                    <td colspan="2"><h3>Đăng nhập Admin</h3></td>
-                </tr>
-                <tr>
-                    <td>Tài khoản</td>
-                    <td><input type = "text" name = "username"></td>
-                </tr>
-                <tr>
-                    <td>Mật khẩu</td>
-                    <td><input type = "password" name = "password"></td>
-                </tr>
-                <tr>
-                    
-                    <td colspan="2"><button type="submit" name="dangnhap">Đăng nhập</button></td>
-                </tr>
-            </table>
+        @if(session('error'))
+    <script>alert("{{ session('error') }}");</script>
+@endif
+
+                    <form action="{{ url('/admin') }}" method="POST" autocomplete="off">
+                @csrf
+                <table border="1" class="table-login" style="text-align: center; border-collapse: collapse;">
+                    <tr><td colspan="2"><h3>Đăng nhập Admin</h3></td></tr>
+                    <tr>
+                        <td>Tài khoản</td>
+                        <td><input type="text" name="username"></td>
+                    </tr>
+                    <tr>
+                        <td>Mật khẩu</td>
+                        <td><input type="password" name="password"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><button type="submit" name="dangnhap">Đăng nhập</button></td>
+                    </tr>
+                </table>
             </form>
+
         </div>
         <script type="text/javascript" scr="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </body>

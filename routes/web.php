@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,15 +25,24 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 
-
+//SANG SANG
 Route::get('/redirect',[HomeController::class,'redirect'] );
 
-Route::get('/', [HomeController::class, 'index'])->name('index');  // Hiển thị sản phẩm mới nhất
+Route::get('/','App\Http\Controllers\HomeController@new');// Hiển thị section sản phẩm mới nhất trong trang chủ
+
 Route::get('/category/{categoryId}', [CategoryController::class, 'show']);  // Hiển thị sản phẩm theo danh mục
+
+Route::get('/allproducts','App\Http\Controllers\StoreController@all'); //Hiển thị tất cả sản phẩm
+
+Route::get('/quick-view/{id}', [ProductsController::class, 'quickView']);//Hiển thị Quick View
+
+Route::get('/store', [StoreController::class, 'index'])->name('store.index');  //này chưa có viết hàm
+
+
+
 
 Route::get('/giaodiendangnhap','App\Http\Controllers\ProductsController@giaodiendangnhap'); //route hiện giao diện đăng nhập
 
-//Route::get('/home/chitiet/{id}','App\Http\Controllers\ProductsController@chitiet');// hiện chi tiết sản phẩm
 
 Route::get('/home/products/{id}','App\Http\Controllers\ProductsController@products')->name('products');// hiện chi tiết sản phẩm
 
@@ -45,4 +55,7 @@ Route::post('/cart/delete','App\Http\Controllers\ProductsController@cartdelete')
 
 Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate')
 ->middleware('auth')->name('ordercreate');
+
+
+
 

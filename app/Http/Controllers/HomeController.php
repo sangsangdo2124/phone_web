@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\Book;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Product;  // Model Product
@@ -30,7 +29,7 @@ class HomeController extends Controller
     }
     
     // Hiển thị sản phẩm mới nhất
-    public function index()
+    public function new()
     {
         // Lấy sản phẩm mới nhất
         $collections = PhanLoai::all();

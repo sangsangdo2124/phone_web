@@ -69,7 +69,7 @@ complete: function(xhr,status){
 		<!--/SECTION COLLECTION -->
 
 		<!-- SẢN PHẨM MỚI NHẤT SECTION -->
-		<div class="section">
+		<div class="section" id="new-products">
 			<div class="container">
 				<div class="row">
 
@@ -81,7 +81,7 @@ complete: function(xhr,status){
 								<ul class="section-tab-nav tab-nav">
 									@foreach($collections as $index => $collection)
 										<li class="{{ $index === 0 ? 'active' : '' }}">
-											<a data-toggle="tab" href="#tab-{{ $collection->id }}">{{ $collection->ten }}</a>
+											<a data-toggle="tab" href="#tab-{{ $collection->id }}">{{ $collection->ten_loai_san_pham }}</a>
 										</li>
 									@endforeach
 								</ul>
@@ -129,7 +129,9 @@ complete: function(xhr,status){
 														<div class="product-btns">
 															<button class="add-to-wishlist"><i class="fa fa-heart-o"></i></button>
 															<button class="add-to-compare"><i class="fa fa-exchange"></i></button>
-															<button class="quick-view"><i class="fa fa-eye"></i></button>
+															<button class="quick-view" data-id="{{ $product->id }}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+															<div id="quick-view-container"></div>
+
 														</div>
 													</div>
 													<div class="add-to-cart">

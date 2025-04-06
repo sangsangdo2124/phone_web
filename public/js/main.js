@@ -124,7 +124,7 @@
 			updatePriceSlider($this , value)
 		})
 	});
-
+	
 	var priceInputMax = document.getElementById('price-max'),
 			priceInputMin = document.getElementById('price-min');
 

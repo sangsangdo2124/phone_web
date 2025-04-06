@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
+Use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Models\Book;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
+
     function home()
     {
         $data = DB::select("select * from san_pham order by gia_ban");
@@ -26,7 +26,6 @@ class ProductsController extends Controller
         $data = DB::select("select * from san_pham where id = ?", [$id])[0];
         return view("pages.products", compact("data"));
     }
-
 
 
 
@@ -131,6 +130,16 @@ class ProductsController extends Controller
     }
 
 
+
+     //Hàm để hiển thị Quick View
+     public function quickView($id)
+     {
+         // Lấy sản phẩm từ cơ sở dữ liệu
+         $product = Product::findOrFail($id);
+ 
+         // Trả về thông tin sản phẩm dưới dạng HTML
+         return view('components.quick-view-content', compact('product'));
+     }
 
 }
 

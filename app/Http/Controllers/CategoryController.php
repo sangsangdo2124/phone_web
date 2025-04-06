@@ -17,5 +17,6 @@ class CategoryController extends Controller
         return view('pages.home', compact('products'));
     }
 }
+    
 
 

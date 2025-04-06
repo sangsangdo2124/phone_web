@@ -59,7 +59,7 @@ class ProductsController extends Controller
         $quantity = [];
         if (session()->has('cart')) {
             $cart = session("cart");
-            $list_book = "";
+            $list_product = "";
             foreach ($cart as $id => $value) {
                 $quantity[$id] = $value;
                 $list_book .= $id . ", ";

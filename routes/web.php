@@ -28,7 +28,7 @@ require __DIR__.'/auth.php';
 //SANG SANG
 Route::get('/redirect',[HomeController::class,'redirect'] );
 
-Route::get('/','App\Http\Controllers\HomeController@new');// Hiển thị section sản phẩm mới nhất trong trang chủ
+Route::get('/','App\Http\Controllers\HomeController@index');// Hiển thị section sản phẩm mới nhất trong trang chủ
 
 Route::get('/category/{categoryId}', [CategoryController::class, 'show']);  // Hiển thị sản phẩm theo danh mục
 

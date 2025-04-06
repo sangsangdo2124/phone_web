@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <ul class="breadcrumb-tree">
-                        <li><a href="{{route('index')}}">Home</a></li>
+                        <li><a href="{{ url('/') }}">Trang chủ</a></li>
                         <li class="active">Giỏ hàng</li>
                     </ul>
                 </div>

@@ -171,7 +171,47 @@
 			<!-- responsive-nav -->
 			<div id="responsive-nav">
 				<!-- NAV -->
+
+				@php
+					$currentCategory = request('category');
+					$currentBrand = request('brand');
+				@endphp
+
 				<ul class="main-nav nav navbar-nav">
+					<li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
+
+					<!-- Danh mục sản phẩm -->
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Sản phẩm <i class="fa fa-caret-down"></i></a>
+						<ul class="dropdown-menu">
+							@foreach($categories as $category)
+								<li>
+									<a href="{{ route('store.index', ['category' => $category->id, 'brand' => $currentBrand]) }}">
+										{{ $category->ten_loai_san_pham }}
+									</a>
+								</li>
+							@endforeach
+						</ul>
+					</li>
+
+					<!-- Thương hiệu -->
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Thương hiệu <i class="fa fa-caret-down"></i></a>
+						<ul class="dropdown-menu">
+							@foreach($brands as $brand)
+								<li>
+									<a href="{{ route('store.index', ['brand' => $brand->id, 'category' => $currentCategory]) }}">
+										{{ $brand->ten_nha_san_xuat }}
+									</a>
+								</li>
+							@endforeach
+						</ul>
+					</li>
+					<li><a href="{{ url('/') }}#new-products">Sản phẩm mới nhất</a></li>
+				</ul>
+
+				
+				<!--ul class="main-nav nav navbar-nav">
 					<li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Sản phẩm <i class="fa fa-caret-down"></i></a>
@@ -198,8 +238,9 @@
 						</ul>
 					</li>
 					<li><a href="{{ url('/') }}#new-products">Sản phẩm mới nhất</a></li>
-				</ul>
+				</ul-->
 				<!-- /NAV -->
+
 			</div>
 			<!-- /responsive-nav -->
 		</div>
@@ -300,7 +341,7 @@
 							<h3 class="footer-title">Hỗ trợ</h3>
 							<ul class="footer-links">
 								<li><a href="#">Tài khoản</a></li>
-								<li><a href="#">Giỏ hàng </a></li>
+								<li><a href="{{ route('order') }}">Giỏ hàng </a></li>
 								<li><a href="#">Danh sách yêu thích</a></li>
 								<li><a href="#">Tư vấn</a></li>
 							</ul>

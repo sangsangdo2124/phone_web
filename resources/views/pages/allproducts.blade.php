@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                             <div class="add-to-cart">
-                                <button class='add-to-cart-btn  add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                                <button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ</button>
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                 </div>
                         
                 <div class="store-filter clearfix">
-                    <span class="store-qty">Showing {{ $products->firstItem() }} - {{ $products->lastItem() }} of {{ $products->total() }} products</span>
+                    <span class="store-qty">Showing {{ $products->firstItem() }} - {{ $products->lastItem() }} of {{ $products->total() }} product</span>
                 <ul class="store-pagination">
                     {{ $products->links() }}
                 </ul>
@@ -78,4 +78,27 @@ $(document).ready(function() {
         $('#quick-view-modal').hide();
     });
 });
+</script>
+<script>
+    $(document).ready(function(){
+        $(".add-product").click(function(){
+        id = $(this).attr("sp_id");
+        num = 1;
+        $.ajax({
+            type:"POST",
+            dataType:"json",
+            url: "{{route('cartadd')}}",
+            data:{"_token": "{{ csrf_token() }}","id":id,"num":num},
+                beforeSend:function(){
+                },
+                success:function(data){
+                    $("#cart-number-product").html(data);
+                },
+                error: function (xhr,status,error){
+                },
+                complete: function(xhr,status){
+                }
+            });
+        });
+    });
 </script>

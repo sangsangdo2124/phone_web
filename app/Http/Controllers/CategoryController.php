@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    
     // Hiển thị sản phẩm theo danh mục
     public function show_category($categoryId)
     {
@@ -16,6 +17,7 @@ class CategoryController extends Controller
         // Truyền dữ liệu vào view
         return view('pages.home', compact('products'));
     }
+
 }
     
 

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\StoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,8 +37,15 @@ Route::get('/allproducts','App\Http\Controllers\StoreController@all'); //Hiển 
 
 Route::get('/quick-view/{id}', [ProductsController::class, 'quickView']);//Hiển thị Quick View
 
-Route::get('/store', [StoreController::class, 'index'])->name('store.index');  //này chưa có viết hàm
+Route::get('/store', 'App\Http\Controllers\StoreController@index')->name('store.index');
 
+//Route::get('/store', [StoreController::class, 'index'])->name('store.index');  //này chưa có viết hàm
+
+
+
+Route::get('/thanks', function () {
+    return view('pages.thanks');
+})->name('thanks');
 
 
 
@@ -47,6 +55,7 @@ Route::get('/giaodiendangnhap','App\Http\Controllers\ProductsController@giaodien
 Route::get('/home/products/{id}','App\Http\Controllers\ProductsController@products')->name('products');// hiện chi tiết sản phẩm
 
 
+
 Route::get('/order','App\Http\Controllers\ProductsController@order')->name('order');
 
 Route::post('/cart/add','App\Http\Controllers\ProductsController@cartadd')->name('cartadd');
@@ -54,7 +63,9 @@ Route::post('/cart/add','App\Http\Controllers\ProductsController@cartadd')->name
 Route::post('/cart/delete','App\Http\Controllers\ProductsController@cartdelete')->name('cartdelete');
 
 Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate')
-->middleware('auth')->name('ordercreate');
+->name('ordercreate');
+
+Route::post('/Muangay', [ProductsController::class, 'Muangay'])->name('Muangay');
 
 
 

@@ -58,7 +58,7 @@ complete: function(xhr,status){
 								</div>
 								<div class="shop-body">
 									<h3>{{ $item->ten_loai_san_pham }}<br>Collection</h3>
-									<a href="{{ url('/san-pham?loai=' . $item->id) }}" class="cta-btn">Xem thêm <i class="fa fa-arrow-circle-right"></i></a>
+									<a href="{{ url('/store?category=' . $item->id) }}" class="cta-btn">Xem thêm <i class="fa fa-arrow-circle-right"></i></a>
 								</div>
 							</div>
 						</div>
@@ -72,7 +72,6 @@ complete: function(xhr,status){
 		<div class="section" id="new-products">
 			<div class="container">
 				<div class="row">
-
 					<!-- section title -->
 					<div class="col-md-12">
 						<div class="section-title">
@@ -134,9 +133,17 @@ complete: function(xhr,status){
 
 														</div>
 													</div>
-													<div class="add-to-cart">
-														<button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> add to cart</button>
+
+
+													<div class="add-to-cart d-flex flex-column gap-2" style="min-height: 90px;">
+														<form method="POST" action="{{ route('Muangay') }}">
+															@csrf
+															<input type="hidden" name="id" value="{{ $product->id }}">
+															<button type="submit" class="add-to-cart-btn add-product">Mua ngay</button>
+														</form>
+														<button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ</button>
 													</div>
+													
 												</div>
 											@endforeach
 										</div>

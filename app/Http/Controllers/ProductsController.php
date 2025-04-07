@@ -52,7 +52,27 @@ class ProductsController extends Controller
         return count($cart);
     }
 
+
     public function order()
+        {
+            $cart = [];
+            $data = [];
+            $quantity = [];
+
+            if (session()->has('cart')) {
+                $cart = session("cart");
+
+                if (count($cart) > 0) {
+                    $quantity = $cart;
+                    $ids = array_keys($cart); // Lấy danh sách ID sản phẩm
+                    $data = DB::table("san_pham")->whereIn("id", $ids)->get();
+                }
+            }
+
+            return view("pages.order", compact("quantity", "data"));
+        }
+
+    /*public function order()
     {
         $cart = [];
         $data = [];
@@ -62,13 +82,41 @@ class ProductsController extends Controller
             $list_product = "";
             foreach ($cart as $id => $value) {
                 $quantity[$id] = $value;
-                $list_book .= $id . ", ";
+                $list_product .= $id . ", ";
             }
-            $list_book = substr($list_book, 0, strlen($list_book) - 2);
-            $data = DB::table("san_pham")->whereRaw("id in (" . $list_book . ")")->get();
+            $list_product = substr($list_product, 0, strlen($list_product)-2);
+            $data = DB::table("san_pham")->whereRaw("id in (" . $list_product . ")")->get();
         }
         return view("pages.order", compact("quantity", "data"));
-    }
+    }*/
+
+    public function Muangay(Request $request)
+        {
+            $request->validate([
+                "id" => ["required", "numeric"]
+            ]);
+
+            $id = $request->id;
+            $cart = [];
+
+            // Nếu đã có giỏ hàng thì lấy ra
+            if (session()->has('cart')) {
+                $cart = session()->get('cart');
+            }
+
+            // Nếu sản phẩm đã tồn tại trong giỏ => tăng số lượng
+            if (isset($cart[$id])) {
+                $cart[$id] += 1;
+            } else {
+                $cart[$id] = 1; // chưa có thì thêm mới với số lượng 1
+            }
+
+            // Cập nhật giỏ hàng
+            session()->put('cart', $cart);
+
+            // Điều hướng đến trang đặt hàng
+            return redirect()->route('order');
+        }
 
     
     public function cartdelete(Request $request)
@@ -89,9 +137,19 @@ class ProductsController extends Controller
 
     public function ordercreate(Request $request)
     {
-        $request->validate([
-            "hinh_thuc_thanh_toan" => ["required", "numeric"]
-        ]);
+        if (Auth::check()) {
+            $request->validate([
+                "hinh_thuc_thanh_toan" => ["required", "numeric"]
+            ]);
+        } else {
+            $request->validate([
+                "hinh_thuc_thanh_toan" => ["required", "numeric"],
+                "name" => ["required", "string"],
+                "email" => ["required", "email"],
+                "address" => ["required", "string"]
+            ]);
+        }
+
         $data = [];
         $quantity = [];
         if (session()->has('cart')) {
@@ -99,20 +157,23 @@ class ProductsController extends Controller
                 "ngay_dat_hang" => DB::raw("now()"),
                 "tinh_trang" => 1,
                 "hinh_thuc_thanh_toan" => $request->hinh_thuc_thanh_toan,
-                "user_id" => Auth::user()->id
+                "user_id" => Auth::check() ? Auth::user()->id : null,
+                "name" => Auth::check() ? Auth::user()->name : $request->name,
+                "email" => Auth::check() ? Auth::user()->email : $request->email,
+                "address" => Auth::check() ? (Auth::user()->address ?? 'Không có địa chỉ') : $request->address
             ];
 
             DB::transaction(function () use ($order) {
                 $id_don_hang = DB::table("don_hang")->insertGetId($order);
                 $cart = session("cart");
-                $list_sp = "";
+                $list_product = "";
                 $quantity = [];
                 foreach ($cart as $id => $value) {
                     $quantity[$id] = $value;
-                    $list_sp .= $id . ", ";
+                    $list_product .= $id . ", ";
                 }
-                $list_sp = substr($list_sp, 0, strlen($list_sp) - 2);
-                $data = DB::table("dienthoai")->whereRaw("product_id in (" . $list_sp . ")")->get();
+                $list_product = substr($list_product, 0, strlen($list_product) - 2);
+                $data = DB::table("san_pham")->whereRaw("id in (" . $list_product . ")")->get();
                 $detail = [];
                 foreach ($data as $row) {
                     $detail[] = [
@@ -122,11 +183,13 @@ class ProductsController extends Controller
                         "don_gia" => $row->gia_ban
                     ];
                 }
-                DB::table("order")->insert($detail);
+                DB::table("chi_tiet_don_hang")->insert($detail);
                 session()->forget('cart');
             });
         }
-        return view("pages.order", compact('data', 'quantity'));
+        return redirect()->route('thanks')->with('success', 'Đặt hàng thành công!');
+
+        //return view("pages.order", compact('data', 'quantity'));
     }
 
 

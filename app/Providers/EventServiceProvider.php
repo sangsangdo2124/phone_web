@@ -6,6 +6,10 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        \Illuminate\Auth\Events\Login::class => [
+            \App\Listeners\SyncCartFromDatabase::class,
+        ],
     ];
 
     /**
@@ -29,4 +36,14 @@ class EventServiceProvider extends ServiceProvider
     {
         //
     }
+
+    public function authenticated(Request $request, $user)
+{
+    $cart = DB::table('cart_items')
+        ->where('user_id', $user->id)
+        ->pluck('so_luong', 'san_pham_id')
+        ->toArray();
+
+    Session::put('cart', $cart);
+}
 }

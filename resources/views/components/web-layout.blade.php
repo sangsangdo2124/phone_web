@@ -65,7 +65,7 @@
 								<i class="fa fa-user-o"></i> {{ Auth::user()->name }}
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="#">Lịch sử mua hàng</a></li>
+								<li><a href="{{ route('accountpanel') }}">Tài khoản</a></li>
 								<li>
 									<form method="POST" action="{{ route('logout') }}">
 										@csrf
@@ -127,18 +127,22 @@
 							<!-- /Danh sách yêu thích -->
 
 							<!-- Cart -->
-							
 
-							<div class="dropdown" >
+
+							<div class="dropdown">
 								<a href="{{ route('order') }}">
 									<i class="fa fa-shopping-cart"></i>
 									<span>Giỏ hàng</span>
 									<div class="qty" id='cart-number-product'>
-										@if (session('cart'))
-											{{ count(session('cart')) }}
-										@else
-											0
-										@endif
+				@php $cartCount = 0;
+					if (Auth::check()) {
+						$cartCount = DB::table('cart_items')->where('user_id', Auth::id())->count();
+					} elseif (session()->has('cart')) {
+						$cartCount = count(session('cart'));
+					}
+				@endphp
+
+										<span id="cart-count">{{ $cartCount }}</span>
 									</div>
 								</a>
 							</div>
@@ -170,47 +174,8 @@
 		<div class="container">
 			<!-- responsive-nav -->
 			<div id="responsive-nav">
-				<!-- NAV -->
-
-				@php
-					$currentCategory = request('category');
-					$currentBrand = request('brand');
-				@endphp
-
-				<ul class="main-nav nav navbar-nav">
-					<li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
-
-					<!-- Danh mục sản phẩm -->
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Sản phẩm <i class="fa fa-caret-down"></i></a>
-						<ul class="dropdown-menu">
-							@foreach($categories as $category)
-								<li>
-									<a href="{{ route('store.index', ['category' => $category->id, 'brand' => $currentBrand]) }}">
-										{{ $category->ten_loai_san_pham }}
-									</a>
-								</li>
-							@endforeach
-						</ul>
-					</li>
-
-					<!-- Thương hiệu -->
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Thương hiệu <i class="fa fa-caret-down"></i></a>
-						<ul class="dropdown-menu">
-							@foreach($brands as $brand)
-								<li>
-									<a href="{{ route('store.index', ['brand' => $brand->id, 'category' => $currentCategory]) }}">
-										{{ $brand->ten_nha_san_xuat }}
-									</a>
-								</li>
-							@endforeach
-						</ul>
-					</li>
-					<li><a href="{{ url('/') }}#new-products">Sản phẩm mới nhất</a></li>
-				</ul>
-
 				
+        <!-- NAV -->
 				<!--ul class="main-nav nav navbar-nav">
 					<li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
 					<li class="dropdown">

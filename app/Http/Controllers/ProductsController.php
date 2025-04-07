@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,61 +31,93 @@ class ProductsController extends Controller
 
 
 
+
+
     public function cartadd(Request $request)
     {
         $request->validate([
             "id" => ["required", "numeric"],
             "num" => ["required", "numeric"]
         ]);
+
         $id = $request->id;
         $num = $request->num;
-        $total = 0;
-        $cart = [];
-        if (session()->has('cart')) {
-            $cart = session()->get("cart");
-            if (isset($cart[$id]))
-                $cart[$id] += $num;
-            else
-                $cart[$id] = $num;
+
+        if (Auth::check()) {
+            $userId = Auth::id();
+
+            // Tìm xem đã có sản phẩm này trong giỏ chưa
+            $item = DB::table('cart_items')
+                ->where('user_id', $userId)
+                ->where('san_pham_id', $id)
+                ->first();
+
+            if ($item) {
+                DB::table('cart_items')
+                    ->where('id', $item->id)
+                    ->update(['so_luong' => $item->so_luong + $num]);
+            } else {
+                DB::table('cart_items')->insert([
+                    'user_id' => $userId,
+                    'san_pham_id' => $id,
+                    'so_luong' => $num,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            // Cập nhật session giỏ hàng nếu muốn dùng cho giao diện
+            $cart = DB::table('cart_items')->where('user_id', $userId)->pluck('so_luong', 'san_pham_id')->toArray();
+            session()->put('cart', $cart);
+            return count($cart);
+
         } else {
-            $cart[$id] = $num;
+            // Xử lý session nếu chưa đăng nhập (dự phòng)
+            $cart = session()->get("cart", []);
+            if (isset($cart[$id])) {
+                $cart[$id] += $num;
+            } else {
+                $cart[$id] = $num;
+            }
+            session()->put("cart", $cart);
+            return count($cart);
         }
-        session()->put("cart", $cart);
-        return count($cart);
     }
+
 
     public function order()
     {
-        $cart = [];
+
         $data = [];
         $quantity = [];
-        if (session()->has('cart')) {
-            $cart = session("cart");
-            $list_book = "";
-            foreach ($cart as $id => $value) {
-                $quantity[$id] = $value;
-                $list_book .= $id . ", ";
+
+        if (Auth::check()) {
+            $cartItems = DB::table('cart_items')->where('user_id', Auth::id())->get();
+
+            if ($cartItems->count()) {
+                $productIds = $cartItems->pluck('san_pham_id')->toArray();
+                $data = DB::table('san_pham')->whereIn('id', $productIds)->get();
+
+                foreach ($cartItems as $item) {
+                    $quantity[$item->san_pham_id] = $item->so_luong;
+                }
             }
-            $list_book = substr($list_book, 0, strlen($list_book) - 2);
-            $data = DB::table("san_pham")->whereRaw("id in (" . $list_book . ")")->get();
         }
         return view("pages.order", compact("quantity", "data"));
     }
 
-    
+
     public function cartdelete(Request $request)
     {
         $request->validate([
             "id" => ["required", "numeric"]
         ]);
+
         $id = $request->id;
-        $total = 0;
-        $cart = [];
-        if (session()->has('cart')) {
-            $cart = session()->get("cart");
-            unset($cart[$id]);
+
+        if (Auth::check()) {
+            DB::table('cart_items')->where('user_id', Auth::id())->where('san_pham_id', $id)->delete();
         }
-        session()->put("cart", $cart);
         return redirect()->route('order');
     }
 
@@ -93,42 +126,89 @@ class ProductsController extends Controller
         $request->validate([
             "hinh_thuc_thanh_toan" => ["required", "numeric"]
         ]);
+
         $data = [];
         $quantity = [];
-        if (session()->has('cart')) {
-            $order = [
-                "ngay_dat_hang" => DB::raw("now()"),
-                "tinh_trang" => 1,
-                "hinh_thuc_thanh_toan" => $request->hinh_thuc_thanh_toan,
-                "user_id" => Auth::user()->id
-            ];
 
-            DB::transaction(function () use ($order) {
-                $id_don_hang = DB::table("don_hang")->insertGetId($order);
-                $cart = session("cart");
-                $list_sp = "";
-                $quantity = [];
-                foreach ($cart as $id => $value) {
-                    $quantity[$id] = $value;
-                    $list_sp .= $id . ", ";
-                }
-                $list_sp = substr($list_sp, 0, strlen($list_sp) - 2);
-                $data = DB::table("dienthoai")->whereRaw("product_id in (" . $list_sp . ")")->get();
-                $detail = [];
-                foreach ($data as $row) {
-                    $detail[] = [
-                        "ma_don_hang" => $id_don_hang,
-                        "product_id" => $row->id,
-                        "so_luong" => $quantity[$row->id],
-                        "don_gia" => $row->gia_ban
-                    ];
-                }
-                DB::table("order")->insert($detail);
-                session()->forget('cart');
-            });
+        if (Auth::check()) {
+            $cartItems = DB::table('cart_items')->where('user_id', Auth::id())->get();
+
+            if ($cartItems->count()) {
+                $order = [
+                    "ngay_dat_hang" => DB::raw("now()"),
+                    "tinh_trang" => 1,
+                    "hinh_thuc_thanh_toan" => $request->hinh_thuc_thanh_toan,
+                    "user_id" => Auth::id()
+                ];
+
+                DB::transaction(function () use ($order, $cartItems, &$data, &$quantity) {
+                    $id_don_hang = DB::table("don_hang")->insertGetId($order);
+
+                    $productIds = $cartItems->pluck('san_pham_id')->toArray();
+                    $data = DB::table("san_pham")->whereIn("id", $productIds)->get();
+
+                    foreach ($cartItems as $item) {
+                        $quantity[$item->san_pham_id] = $item->so_luong;
+                    }
+
+                    $detail = [];
+                    foreach ($data as $row) {
+                        $detail[] = [
+                            "ma_don_hang" => $id_don_hang,
+                            "product_id" => $row->id,
+                            "so_luong" => $quantity[$row->id],
+                            "don_gia" => $row->gia_ban
+                        ];
+                    }
+
+                    DB::table("chi_tiet_don_hang")->insert($detail);
+                    DB::table("cart_items")->where('user_id', Auth::id())->delete();
+                    // Xoá biến giỏ hàng để không truyền về view
+                    $data = [];
+                    $quantity = [];
+                });
+            }
+
         }
-        return view("pages.order", compact('data', 'quantity'));
+        return view("pages.thankyou", [
+            'ngay_giao_du_kien' => now()->addDays(3)->format('d/m/Y')
+        ]);    }
+
+    public function cartCount()
+    {
+        $count = 0;
+        if (Auth::check()) {
+            $count = DB::table('cart_items')->where('user_id', Auth::id())->count();
+        } elseif (session()->has('cart')) {
+            $count = count(session('cart'));
+        }
+
+        return response()->json($count);
     }
+
+    public function checkout()
+{
+    $user = DB::table("users")->whereRaw("id=?", [Auth::user()->id])->first();
+
+    $data = [];
+    $quantity = [];
+
+    if (Auth::check()) {
+        $cartItems = DB::table('cart_items')->where('user_id', Auth::id())->get();
+
+        if ($cartItems->count()) {
+            $productIds = $cartItems->pluck('san_pham_id')->toArray();
+            $data = DB::table('san_pham')->whereIn('id', $productIds)->get();
+
+            foreach ($cartItems as $item) {
+                $quantity[$item->san_pham_id] = $item->so_luong;
+            }
+        }
+    }
+
+    return view("pages.checkout", compact("data", "quantity", "user"));
+}
+
 
 
 

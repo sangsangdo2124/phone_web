@@ -65,7 +65,7 @@
 								<i class="fa fa-user-o"></i> {{ Auth::user()->name }}
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="#">Lịch sử mua hàng</a></li>
+								<li><a href="{{ route('accountpanel') }}">Tài khoản</a></li>
 								<li>
 									<form method="POST" action="{{ route('logout') }}">
 										@csrf
@@ -132,18 +132,22 @@
 							<!-- /Danh sách yêu thích -->
 
 							<!-- Cart -->
-							
 
-							<div class="dropdown" >
+
+							<div class="dropdown">
 								<a href="{{ route('order') }}">
 									<i class="fa fa-shopping-cart"></i>
 									<span>Giỏ hàng</span>
 									<div class="qty" id='cart-number-product'>
-										@if (session('cart'))
-											{{ count(session('cart')) }}
-										@else
-											0
-										@endif
+				@php $cartCount = 0;
+					if (Auth::check()) {
+						$cartCount = DB::table('cart_items')->where('user_id', Auth::id())->count();
+					} elseif (session()->has('cart')) {
+						$cartCount = count(session('cart'));
+					}
+				@endphp
+
+										<span id="cart-count">{{ $cartCount }}</span>
 									</div>
 								</a>
 							</div>
@@ -177,7 +181,7 @@
 			<div id="responsive-nav">
 				<!-- NAV -->
 				<ul class="main-nav nav navbar-nav">
-					<li class="active"><a href="#">Trang chủ</a></li>
+					<li class="active"><a href="{{ route('redirect') }}">Trang chủ</a></li>
 					<li><a href="#">Sản phẩm</a></li>
 					<li><a href="#">Thương hiệu</a></li>
 					<li><a href="#">Phụ kiện công nghệ</a></li>

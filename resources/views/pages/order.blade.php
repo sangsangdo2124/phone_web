@@ -72,31 +72,21 @@
             </tr>
         </tbody>
     </table>
+    <br>
 
     <div style='font-weight:bold;width:70%;margin:0 auto;text-align:center;'>
-        @auth
-            @if(count($data) > 0)
-                <form method='post' action="{{route('ordercreate')}}">
-                    Hình thức thanh toán <br>
-                    <div class='d-inline-flex'>
-                        <select name='hinh_thuc_thanh_toan' class='form-control form-control-sm'>
-                            <option value='1'>Tiền mặt</option>
-                            <option value='2'>Chuyển khoản</option>
-                            <option value='3'>Thanh toán VNPay</option>
-                        </select>
-                    </div><br>
-                    <input type='submit' class='btn btn-sm btn-primary mt-1' value='ĐẶT HÀNG'>
-                    {{ csrf_field() }}
-                </form>
-            @else
-                Vui lòng chọn sản phẩm cần mua
-            @endif
+    @auth
+        @if(count($data) > 0)
+            <!-- Nút "THANH TOÁN" chỉ chuyển sang trang checkout -->
+            <a href="{{ route('checkout') }}" class='btn btn-sm btn-danger mt-2'>MUA NGAY</a>
         @else
-            Vui lòng đăng nhập trước khi đặt hàng
-        @endauth
+            Vui lòng chọn sản phẩm cần mua
+        @endif
+    @else
+        Vui lòng đăng nhập trước khi đặt hàng
+    @endauth
+</div>
 
-
-    </div>
 
 
     <!-- /Order Details -->

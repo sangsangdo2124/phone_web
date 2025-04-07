@@ -64,6 +64,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a href="#">Lịch sử mua hàng</a></li>
+				<li><a class="dropdown-item" href="#">Quản lý</a></li>
                 <li>
                   <form method="POST" action="{{ route('logout') }}">
                     @csrf

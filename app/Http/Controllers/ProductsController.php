@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+Use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\cart;
@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
+
     function home()
     {
         $data = DB::select("select * from san_pham order by gia_ban");
@@ -27,9 +28,6 @@ class ProductsController extends Controller
         $data = DB::select("select * from san_pham where id = ?", [$id])[0];
         return view("pages.products", compact("data"));
     }
-
-
-
 
 
 
@@ -85,6 +83,7 @@ class ProductsController extends Controller
     }
 
 
+ 
     public function order()
     {
 
@@ -105,6 +104,34 @@ class ProductsController extends Controller
         }
         return view("pages.order", compact("quantity", "data"));
     }
+
+    public function Muangay(Request $request)
+        {
+            $request->validate([
+                "id" => ["required", "numeric"]
+            ]);
+
+            $id = $request->id;
+            $cart = [];
+
+            // Nếu đã có giỏ hàng thì lấy ra
+            if (session()->has('cart')) {
+                $cart = session()->get('cart');
+            }
+
+            // Nếu sản phẩm đã tồn tại trong giỏ => tăng số lượng
+            if (isset($cart[$id])) {
+                $cart[$id] += 1;
+            } else {
+                $cart[$id] = 1; // chưa có thì thêm mới với số lượng 1
+            }
+
+            // Cập nhật giỏ hàng
+            session()->put('cart', $cart);
+
+            // Điều hướng đến trang đặt hàng
+            return redirect()->route('order');
+        }
 
 
     public function cartdelete(Request $request)
@@ -186,31 +213,40 @@ class ProductsController extends Controller
         return response()->json($count);
     }
 
+  
     public function checkout()
-{
-    $user = DB::table("users")->whereRaw("id=?", [Auth::user()->id])->first();
+    {
+      $user = DB::table("users")->whereRaw("id=?", [Auth::user()->id])->first();
 
-    $data = [];
-    $quantity = [];
+      $data = [];
+      $quantity = [];
 
-    if (Auth::check()) {
-        $cartItems = DB::table('cart_items')->where('user_id', Auth::id())->get();
+      if (Auth::check()) {
+          $cartItems = DB::table('cart_items')->where('user_id', Auth::id())->get();
 
-        if ($cartItems->count()) {
-            $productIds = $cartItems->pluck('san_pham_id')->toArray();
-            $data = DB::table('san_pham')->whereIn('id', $productIds)->get();
+          if ($cartItems->count()) {
+              $productIds = $cartItems->pluck('san_pham_id')->toArray();
+              $data = DB::table('san_pham')->whereIn('id', $productIds)->get();
 
-            foreach ($cartItems as $item) {
-                $quantity[$item->san_pham_id] = $item->so_luong;
-            }
-        }
-    }
+              foreach ($cartItems as $item) {
+                  $quantity[$item->san_pham_id] = $item->so_luong;
+              }
+          }
+      }
 
-    return view("pages.checkout", compact("data", "quantity", "user"));
-}
+      return view("pages.checkout", compact("data", "quantity", "user"));
+   }
 
 
-
+     //Hàm để hiển thị Quick View
+     public function quickView($id)
+     {
+         // Lấy sản phẩm từ cơ sở dữ liệu
+         $product = Product::findOrFail($id);
+ 
+         // Trả về thông tin sản phẩm dưới dạng HTML
+         return view('components.quick-view-content', compact('product'));
+     }
 
 }
 

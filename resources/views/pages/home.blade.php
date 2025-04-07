@@ -68,7 +68,7 @@ complete: function(xhr,status){
 								</div>
 								<div class="shop-body">
 									<h3>{{ $item->ten_loai_san_pham }}<br>Collection</h3>
-									<a href="{{ url('/san-pham?loai=' . $item->id) }}" class="cta-btn">Xem thêm <i class="fa fa-arrow-circle-right"></i></a>
+									<a href="{{ url('/store?category=' . $item->id) }}" class="cta-btn">Xem thêm <i class="fa fa-arrow-circle-right"></i></a>
 								</div>
 							</div>
 						</div>
@@ -79,10 +79,9 @@ complete: function(xhr,status){
 		<!--/SECTION COLLECTION -->
 
 		<!-- SẢN PHẨM MỚI NHẤT SECTION -->
-		<div class="section">
+		<div class="section" id="new-products">
 			<div class="container">
 				<div class="row">
-
 					<!-- section title -->
 					<div class="col-md-12">
 						<div class="section-title">
@@ -91,7 +90,7 @@ complete: function(xhr,status){
 								<ul class="section-tab-nav tab-nav">
 									@foreach($collections as $index => $collection)
 										<li class="{{ $index === 0 ? 'active' : '' }}">
-											<a data-toggle="tab" href="#tab-{{ $collection->id }}">{{ $collection->ten }}</a>
+											<a data-toggle="tab" href="#tab-{{ $collection->id }}">{{ $collection->ten_loai_san_pham }}</a>
 										</li>
 									@endforeach
 								</ul>
@@ -139,14 +138,21 @@ complete: function(xhr,status){
 														<div class="product-btns">
 															<button class="add-to-wishlist"><i class="fa fa-heart-o"></i></button>
 															<button class="add-to-compare"><i class="fa fa-exchange"></i></button>
-															<button class="quick-view"><i class="fa fa-eye"></i></button>
+															<button class="quick-view" data-id="{{ $product->id }}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+															<div id="quick-view-container"></div>
+
 														</div>
 													</div>
-													<div class="add-to-cart">
-														<button class='add-to-cart-btn add-product' sp_id="{{$product->id}}">
-															<i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
-														</button>
+
+													<div class="add-to-cart d-flex flex-column gap-2" style="min-height: 90px;">
+														<form method="POST" action="{{ route('Muangay') }}">
+															@csrf
+															<input type="hidden" name="id" value="{{ $product->id }}">
+															<button type="submit" class="add-to-cart-btn add-product">Mua ngay</button>
+														</form>
+														<button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ</button>
 													</div>
+									
 												</div>
 											@endforeach
 										</div>

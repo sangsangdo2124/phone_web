@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,3 +46,5 @@ Route::post('/cart/delete','App\Http\Controllers\ProductsController@cartdelete')
 Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate')
 ->middleware('auth')->name('ordercreate');
 
+// Định nghĩa route cho trang quản lý
+Route::get('/redirect/products','App\Http\Controllers\AdminController@listproducts')->name('listproducts');

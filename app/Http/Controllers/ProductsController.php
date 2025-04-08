@@ -14,6 +14,7 @@ class ProductsController extends Controller
         $data = DB::select("select * from san_pham order by gia_ban");
         return view("pages.home", compact("data"));
     }
+    
 
     function giaodiendangnhap()
     {

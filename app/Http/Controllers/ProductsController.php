@@ -130,7 +130,25 @@ class ProductsController extends Controller
         return view("pages.order", compact('data', 'quantity'));
     }
 
+    function lichsuht()
+    {
+        return view("pages.lichsuht", ['title' => 'Lịch sử hình thành']);
+    }
 
+    function thuonghieu()
+    {
+        return view("pages.thuonghieu", ['title' => 'Thương hiệu']);
+    }
+
+    function csdoitra_baohanh()
+    {
+        return view("pages.csdoitra_baohanh",  ['title' => 'Chính sách đổi trả - bảo hành']);
+    }
+
+    function tuvan()
+    {
+        return view("pages.tuvan", ['title' => 'Tư vấn']);
+    }
 
 }
 

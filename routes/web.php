@@ -46,3 +46,9 @@ Route::post('/cart/delete','App\Http\Controllers\ProductsController@cartdelete')
 Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate')
 ->middleware('auth')->name('ordercreate');
 
+
+//Footer
+Route::get('/lichsuht','App\Http\Controllers\ProductsController@lichsuht')->name('lichsuht');
+Route::get('/thuonghieu','App\Http\Controllers\ProductsController@thuonghieu')->name('thuonghieu');
+Route::get('/csdoitra_baohanh','App\Http\Controllers\ProductsController@csdoitra_baohanh')->name('csdoitra_baohanh');
+Route::get('/tuvan','App\Http\Controllers\ProductsController@tuvan')->name('tuvan');

@@ -118,7 +118,9 @@
 														<form method="POST" action="{{ route('Muangay') }}">
 															@csrf
 															<input type="hidden" name="id" value="{{ $product->id }}">
-															<button type="submit" class="add-to-cart-btn add-product">Mua ngay</button>
+															<button type="submit" class="add-to-cart-btn add-product">
+																<i class="fa fa-bolt"></i> Mua ngay
+															</button>
 														</form>
 														<button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng</button>
 													</div>

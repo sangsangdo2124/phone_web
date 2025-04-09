@@ -1672,6 +1672,7 @@ body {
     margin-top: 20px;
   }
   
+
   .product-details .add-to-cart .add-to-cart-btn {
     position: relative;
     border: 2px solid transparent;
@@ -1716,7 +1717,7 @@ body {
     font-size: 12px;
     text-transform: uppercase;
     margin-right: 15px;
-    margin-bottom: 0px;
+    margin-bottom: 15px;
   }
   
   .product-details .add-to-cart .qty-label .input-number {

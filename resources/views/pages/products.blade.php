@@ -30,7 +30,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 d-flex justify-content-center align-items-center">
-                    <img src="{{asset('img/' . $data->hinh_anh_chinh)}}" weight="500px" height="500px">
+                    <img src="{{asset('img/' . $data->hinh_anh_chinh)}}" width="500px" height="400px">
                 </div>
 
 
@@ -57,12 +57,26 @@
                                     <span class="qty-down">-</span>
                                 </div>
                             </div>
-                            <button class="add-to-cart-btn" id='add-to-cart'><i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng</button>
+
+
+                            <div class="d-flex flex-row gap-2 mt-3 align-items-center">
+                                <form method="POST" action="{{ route('Muangay') }}" class="m-0 p-0" style="display: inline;">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $data->id }}">
+                                    <button type="submit" class="add-to-cart-btn add-product">
+                                        <i class="fa fa-bolt"></i> Mua ngay
+                                    </button>
+                                </form>
+
+                                <button class="add-to-cart-btn" id="add-to-cart">
+                                    <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
+                                </button>
+                            </div>
                         </div>
                             
                         </div>
                         <ul class="product-btns">
-                            <li><a href="#"><i class="fa fa-heart-o"></i>Thêm vào yêu thích</a></li>
+                            <li><a href="#"><i class="fa fa-heart-o"></i> Thêm vào danh sách yêu thích</a></li>
 
                         </ul>
 

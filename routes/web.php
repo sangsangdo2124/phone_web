@@ -45,3 +45,4 @@ Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate
 
 // Định nghĩa route cho trang quản lý
 Route::get('/redirect/products','App\Http\Controllers\AdminController@listproducts')->name('listproducts');
+Route::get('/redirect/products/insert','App\Http\Controllers\AdminController@insert')->name('products.insert');

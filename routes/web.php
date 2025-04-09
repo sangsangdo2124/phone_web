@@ -34,13 +34,13 @@ Route::get('/','App\Http\Controllers\HomeController@index');// Hiển thị sect
 
 Route::get('/category/{categoryId}', [CategoryController::class, 'show']);  // Hiển thị sản phẩm theo danh mục
 
-Route::get('/allproducts','App\Http\Controllers\StoreController@all'); //Hiển thị tất cả sản phẩm
+Route::get('/allproducts','App\Http\Controllers\StoreController@all')->name('allproducts'); //Hiển thị tất cả sản phẩm
 
 Route::get('/quick-view/{id}', [ProductsController::class, 'quickView']);//Hiển thị Quick View
 
 Route::get('/store', 'App\Http\Controllers\StoreController@index')->name('store.index');
 
-//Route::get('/store', [StoreController::class, 'index'])->name('store.index');  //này chưa có viết hàm
+Route::get('/store', [StoreController::class, 'index'])->name('store.index');  //này chưa có viết hàm
 
 
 

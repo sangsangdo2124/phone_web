@@ -186,7 +186,6 @@ class ProductsController extends Controller
         return view("pages.thankyou", [
             'ngay_giao_du_kien' => now()->addDays(3)->format('d/m/Y')
         ]);   
-     }
     }
 
 

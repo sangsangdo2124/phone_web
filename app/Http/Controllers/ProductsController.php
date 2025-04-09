@@ -17,11 +17,6 @@ class ProductsController extends Controller
         return view("pages.home", compact("data"));
     }
 
-    function giaodiendangnhap()
-    {
-
-        return view("pages.giaodiendangnhap");
-    }
 
     function products($id)
     {
@@ -191,6 +186,7 @@ class ProductsController extends Controller
         return view("pages.thankyou", [
             'ngay_giao_du_kien' => now()->addDays(3)->format('d/m/Y')
         ]);   
+     }
     }
 
 

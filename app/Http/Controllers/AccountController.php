@@ -9,32 +9,32 @@ use Carbon\Carbon;
 class AccountController extends Controller
 {
     public function accountpanel()
-{
-    $userId = Auth::id(); 
-    $user = DB::table("users")->where("id", $userId)->first();
+    {
+        $userId = Auth::id();
+        $user = DB::table("users")->where("id", $userId)->first();
 
-    $startDate = Carbon::createFromFormat('Y-m-d', '2025-01-01');
+        $startDate = Carbon::createFromFormat('Y-m-d', '2025-01-01');
 
-    // Lấy danh sách đơn hàng từ 01/01/2025
-    $orders = DB::table("don_hang")
-        ->where("user_id", $userId)
-        ->where("ngay_dat_hang", '>=', $startDate)
-        ->pluck("ma_don_hang");
+        // Lấy danh sách đơn hàng từ 01/01/2025
+        $orders = DB::table("don_hang")
+            ->where("user_id", $userId)
+            ->where("ngay_dat_hang", '>=', $startDate)
+            ->pluck("ma_don_hang");
 
-    $orderCount = $orders->count();
+        $orderCount = $orders->count();
 
-    $totalAmount = 0;
-    if ($orders->isNotEmpty()) {
-        $details = DB::table("chi_tiet_don_hang")
-            ->whereIn('ma_don_hang', $orders)
-            ->select(DB::raw('SUM(so_luong * don_gia) as total'))
-            ->first();
+        $totalAmount = 0;
+        if ($orders->isNotEmpty()) {
+            $details = DB::table("chi_tiet_don_hang")
+                ->whereIn('ma_don_hang', $orders)
+                ->select(DB::raw('SUM(so_luong * don_gia) as total'))
+                ->first();
 
-        $totalAmount = $details->total ?? 0;
+            $totalAmount = $details->total ?? 0;
+        }
+
+        return view('pages.accountpanel', compact('user', 'orderCount', 'totalAmount'));
     }
-
-    return view('pages.accountpanel', compact('user', 'orderCount', 'totalAmount'));
-}
 
 
     function saveaccountinfo(Request $request)
@@ -43,8 +43,8 @@ class AccountController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'phone' => ['nullable', 'string'],
-            'dia_chi'=> ['nullable', 'string', 'max:255'],
-            'profile_photo_path'=> ['nullable', 'image']
+            'dia_chi' => ['nullable', 'string', 'max:255'],
+            'profile_photo_path' => ['nullable', 'image']
         ]);
         $id = $request->input('id');
         $data["name"] = $request->input("name");
@@ -73,7 +73,31 @@ class AccountController extends Controller
     function lichsumuahang()
     {
         $user = DB::table("users")->whereRaw("id=?", [Auth::user()->id])->first();
-        return view("pages.lichsumuahang", compact("user"));
+
+
+        // Lấy các đơn hàng của user, kèm theo sản phẩm trong mỗi đơn
+        $don_hang = DB::table('don_hang')
+            ->where('user_id', Auth::id())
+            ->orderByDesc('ngay_dat_hang')
+            ->get()
+            ->map(function ($order) {
+                // Lấy danh sách sản phẩm của từng đơn hàng
+                $items = DB::table('chi_tiet_don_hang')
+                    ->join('san_pham', 'chi_tiet_don_hang.product_id', '=', 'san_pham.id')
+                    ->where('chi_tiet_don_hang.ma_don_hang', $order->ma_don_hang)
+                    ->select('san_pham.ten_san_pham', 'san_pham.hinh_anh_chinh', 'chi_tiet_don_hang.so_luong', 'chi_tiet_don_hang.don_gia')
+                    ->get();
+
+                // Gắn sản phẩm và tổng tiền
+                $order->items = $items;
+                $order->tong_tien = $items->sum(function ($item) {
+                    return $item->don_gia * $item->so_luong;
+                });
+              
+                return $order;
+            });
+
+        return view("pages.lichsumuahang", compact("user", "don_hang"));
     }
 
 

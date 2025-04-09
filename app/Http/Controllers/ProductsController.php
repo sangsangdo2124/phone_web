@@ -106,32 +106,23 @@ class ProductsController extends Controller
     }
 
     public function Muangay(Request $request)
-        {
-            $request->validate([
-                "id" => ["required", "numeric"]
-            ]);
+    {
+        $request->validate([
+            "id" => ["required", "numeric"]
+        ]);
 
-            $id = $request->id;
-            $cart = [];
+        $id = $request->id;
 
-            // Nếu đã có giỏ hàng thì lấy ra
-            if (session()->has('cart')) {
-                $cart = session()->get('cart');
-            }
+        // Tạo session tạm cho sản phẩm mua ngay
+        session()->put('muangay', [
+            'id' => $id,
+            'so_luong' => 1
+        ]);
 
-            // Nếu sản phẩm đã tồn tại trong giỏ => tăng số lượng
-            if (isset($cart[$id])) {
-                $cart[$id] += 1;
-            } else {
-                $cart[$id] = 1; // chưa có thì thêm mới với số lượng 1
-            }
+        // Chuyển hướng đến trang thanh toán
+        return redirect()->route('checkout');
+    }
 
-            // Cập nhật giỏ hàng
-            session()->put('cart', $cart);
-
-            // Điều hướng đến trang đặt hàng
-            return redirect()->route('order');
-        }
 
 
     public function cartdelete(Request $request)
@@ -199,7 +190,10 @@ class ProductsController extends Controller
         }
         return view("pages.thankyou", [
             'ngay_giao_du_kien' => now()->addDays(3)->format('d/m/Y')
-        ]);    }
+        ]);   
+    }
+
+
 
     public function cartCount()
     {
@@ -214,28 +208,34 @@ class ProductsController extends Controller
     }
 
   
-    public function checkout()
-    {
-      $user = DB::table("users")->whereRaw("id=?", [Auth::user()->id])->first();
+    public function checkout(){
+        $user = DB::table("users")->whereRaw("id=?", [Auth::user()->id])->first();
+        $data = [];
+        $quantity = [];
 
-      $data = [];
-      $quantity = [];
+        if (session()->has('muangay')) {
+            $muangay = session()->get('muangay');
+            $product = DB::table("san_pham")->where("id", $muangay['id'])->first();
 
-      if (Auth::check()) {
-          $cartItems = DB::table('cart_items')->where('user_id', Auth::id())->get();
+            if ($product) {
+                $data[] = $product;
+                $quantity[$product->id] = $muangay['so_luong'];
+            }
+        } elseif (Auth::check()) {
+            $cartItems = DB::table('cart_items')->where('user_id', Auth::id())->get();
 
-          if ($cartItems->count()) {
-              $productIds = $cartItems->pluck('san_pham_id')->toArray();
-              $data = DB::table('san_pham')->whereIn('id', $productIds)->get();
+            if ($cartItems->count()) {
+                $productIds = $cartItems->pluck('san_pham_id')->toArray();
+                $data = DB::table('san_pham')->whereIn('id', $productIds)->get();
 
-              foreach ($cartItems as $item) {
-                  $quantity[$item->san_pham_id] = $item->so_luong;
-              }
-          }
-      }
+                foreach ($cartItems as $item) {
+                    $quantity[$item->san_pham_id] = $item->so_luong;
+                }
+            }
+        }
 
-      return view("pages.checkout", compact("data", "quantity", "user"));
-   }
+        return view("pages.checkout", compact("data", "quantity", "user"));
+    }
 
 
      //Hàm để hiển thị Quick View

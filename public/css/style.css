@@ -758,42 +758,43 @@ body {
   .header-ctn li.nav-toggle {
     display: none;
   }
-		/* Tùy chỉnh dropdown*/
-		.dropdown-menu {
-			background-color: #333;
-			border: 2px solid #D10024 border-radius: 5px;
-			padding: 10px 0;
-			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-		}
+	/* Tùy chỉnh dropdown*/
+  .dropdown-menu {
+    background-color: #333;
+    border: 2px solid #D10024;
+    border-radius: 5px;
+    padding: 10px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
 
-		/* Màu chữ và hover của item trong dropdown */
-		.dropdown-menu li a {
-			color: white;
-			padding: 10px 20px;
-			font-size: 16px;
-		}
+  /* Màu chữ và hover của item trong dropdown */
+  .dropdown-menu li a {
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
 
-		.dropdown-menu li a:hover {
-			background-color: #ff666f;
-			color: white;
-		}
+  .dropdown-menu li a:hover {
+    background-color: #ff666f;
+    color: white;
+  }
 
-		/* Kích thước của dropdown */
-		.dropdown-toggle {
-			font-size: 15px;
-		}
+  /* Kích thước của dropdown */
+  .dropdown-toggle {
+    font-size: 15px;
+  }
 
-		/* Thêm hiệu ứng cho dropdown */
-		.dropdown-menu {
-			transition: all 0.3s ease-in-out;
-			opacity: 0;
-			visibility: hidden;
-		}
+  /* Thêm hiệu ứng cho dropdown */
+  .dropdown-menu {
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+  }
 
-		.dropdown:hover .dropdown-menu {
-			opacity: 1;
-			visibility: visible;
-		}
+  .dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+  }
 
   /*----------------------------*\
       responsive nav

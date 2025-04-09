@@ -83,7 +83,6 @@
     <div class="flex-grow-1">
         <div class="topbar">
             <span>Chào mừng bạn đến với trang quản trị!</span>
-            <span><i class="bi bi-globe"></i> Tiếng Việt &nbsp;
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-decoration-none text-dark dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}

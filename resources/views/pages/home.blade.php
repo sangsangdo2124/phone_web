@@ -56,20 +56,20 @@
 	<!-- /HOT DEAL SECTION -->
 
 
-	<!-- SECTION COLLECTION-->
-	<div class="section">
-		<div class="container">
-			<div class="row">
-				@foreach ($collections as $item)
-					<div class="col-md-4 col-xs-6">
-						<div class="shop">
-							<div class="shop-img">
-								<img src="{{ asset('img/shop0' . $loop->iteration . '.png') }}" alt="">
-							</div>
-							<div class="shop-body">
-								<h3>{{ $item->ten_loai_san_pham }}<br>Collection</h3>
-								<a href="{{ url('/san-pham?loai=' . $item->id) }}" class="cta-btn">Xem thêm <i
-										class="fa fa-arrow-circle-right"></i></a>
+		<!-- SECTION COLLECTION-->
+		<div class="section">
+			<div class="container">
+				<div class="row">
+					@foreach ($collections as $item)
+						<div class="col-md-4 col-xs-6">
+							<div class="shop">
+								<div class="shop-img">
+									<img src="{{ asset('img/shop0' . $loop->iteration . '.png') }}" alt="">
+								</div>
+								<div class="shop-body">
+									<h3>{{ $item->ten_loai_san_pham }}<br>Collection</h3>
+									<a href="{{ url('/store?category=' . $item->id) }}" class="cta-btn">Xem thêm <i class="fa fa-arrow-circle-right"></i></a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -79,23 +79,23 @@
 	</div>
 	<!--/SECTION COLLECTION -->
 
-	<!-- SẢN PHẨM MỚI NHẤT SECTION -->
-	<div class="section">
-		<div class="container">
-			<div class="row">
-
-				<!-- section title -->
-				<div class="col-md-12">
-					<div class="section-title">
-						<h3 class="title">SẢN PHẨM MỚI NHẤT</h3>
-						<div class="section-nav">
-							<ul class="section-tab-nav tab-nav">
-								@foreach($collections as $index => $collection)
-									<li class="{{ $index === 0 ? 'active' : '' }}">
-										<a data-toggle="tab" href="#tab-{{ $collection->id }}">{{ $collection->ten }}</a>
-									</li>
-								@endforeach
-							</ul>
+		<!-- SẢN PHẨM MỚI NHẤT SECTION -->
+		<div class="section" id="new-products">
+			<div class="container">
+				<div class="row">
+					<!-- section title -->
+					<div class="col-md-12">
+						<div class="section-title">
+							<h3 class="title">SẢN PHẨM MỚI NHẤT</h3>
+							<div class="section-nav">
+								<ul class="section-tab-nav tab-nav">
+									@foreach($collections as $index => $collection)
+										<li class="{{ $index === 0 ? 'active' : '' }}">
+											<a data-toggle="tab" href="#tab-{{ $collection->id }}">{{ $collection->ten_loai_san_pham }}</a>
+										</li>
+									@endforeach
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -136,22 +136,28 @@
 														@endif
 													</h4>
 
-													<div class="product-rating">
-														@for($i = 1; $i <= 5; $i++)
-															<i class="fa fa-star{{ $i <= $product->rating ? '' : '-o' }}"></i>
-														@endfor
+														<div class="product-rating">
+															@for($i = 1; $i <= 5; $i++)
+																<i class="fa fa-star{{ $i <= $product->rating ? '' : '-o' }}"></i>
+															@endfor
+														</div>
+														<div class="product-btns">
+															<button class="add-to-wishlist"><i class="fa fa-heart-o"></i></button>
+															<button class="add-to-compare"><i class="fa fa-exchange"></i></button>
+															<button class="quick-view" data-id="{{ $product->id }}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+															<div id="quick-view-container"></div>
+
+														</div>
 													</div>
-													<div class="product-btns">
-														<button class="add-to-wishlist"><i class="fa fa-heart-o"></i></button>
-														<button class="add-to-compare"><i class="fa fa-exchange"></i></button>
-														<button class="quick-view"><i class="fa fa-eye"></i></button>
+
+													<div class="add-to-cart d-flex flex-column gap-2" style="min-height: 90px;">
+														<form method="POST" action="{{ route('Muangay') }}">
+															@csrf
+															<input type="hidden" name="id" value="{{ $product->id }}">
+															<button type="submit" class="add-to-cart-btn add-product">Mua ngay</button>
+														</form>
+														<button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ</button>
 													</div>
-												</div>
-												<div class="add-to-cart">
-													<button class='add-to-cart-btn add-product' sp_id="{{$product->id}}">
-														<i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
-													</button>
-												</div>
 											</div>
 										@endforeach
 									</div>

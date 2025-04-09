@@ -13,4 +13,4 @@
 
 
     
-</x-book-layout>
+</x-web-layout>

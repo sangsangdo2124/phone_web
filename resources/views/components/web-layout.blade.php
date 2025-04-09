@@ -95,7 +95,7 @@
 					<!-- LOGO -->
 					<div class="col-md-3">
 						<div class="header-logo">
-							<a href="#" class="logo">
+							<a href="{{ url('/') }}" class="logo">
 								<img src="{{ asset('img/logo.png') }}" alt="Logo">
 							</a>
 						</div>
@@ -106,11 +106,6 @@
 					<div class="col-md-6">
 						<div class="header-search">
 							<form>
-								<select class="input-select">
-									<option value="0">All Categories</option>
-									<option value="1">Category 01</option>
-									<option value="2">Category 02</option>
-								</select>
 								<input class="input" placeholder="Bạn cần tìm gì?">
 								<button class="search-btn">Tìm kiếm</button>
 							</form>
@@ -179,14 +174,38 @@
 		<div class="container">
 			<!-- responsive-nav -->
 			<div id="responsive-nav">
-				<!-- NAV -->
+				
+        <!-- NAV -->
 				<ul class="main-nav nav navbar-nav">
-					<li class="active"><a href="{{ route('redirect') }}">Trang chủ</a></li>
-					<li><a href="#">Sản phẩm</a></li>
-					<li><a href="#">Thương hiệu</a></li>
-					<li><a href="#">Phụ kiện công nghệ</a></li>
+					<li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Sản phẩm <i class="fa fa-caret-down"></i></a>
+						<ul class="dropdown-menu">
+							@foreach($categories as $category)
+								<li>
+									<a href="{{ route('store.index', ['category' => $category->id]) }}">
+										{{ $category->ten_loai_san_pham }}
+									</a>
+                				</li>
+            				@endforeach
+        				</ul>
+    				</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Thương hiệu <i class="fa fa-caret-down"></i></a>
+						<ul class="dropdown-menu">
+							@foreach($brands as $brand)
+								<li>
+									<a href="{{ route('store.index', ['brand' => $brand->id]) }}">
+										{{ $brand->ten_nha_san_xuat }}
+									</a>
+								</li>
+							@endforeach
+						</ul>
+					</li>
+					<li><a href="{{ url('/') }}#new-products">Sản phẩm mới nhất</a></li>
 				</ul>
 				<!-- /NAV -->
+
 			</div>
 			<!-- /responsive-nav -->
 		</div>
@@ -202,7 +221,7 @@
 		{{$slot}}
 	</div>
 	<!-- /SECTION -->
-
+	
 	<!-- NEWSLETTER -->
 	<div id="newsletter" class="section">
 		<!-- container -->
@@ -287,7 +306,7 @@
 							<h3 class="footer-title">Hỗ trợ</h3>
 							<ul class="footer-links">
 								<li><a href="#">Tài khoản</a></li>
-								<li><a href="#">Giỏ hàng </a></li>
+								<li><a href="{{ route('order') }}">Giỏ hàng </a></li>
 								<li><a href="#">Danh sách yêu thích</a></li>
 								<li><a href="#">Tư vấn</a></li>
 							</ul>
@@ -370,7 +389,7 @@
 
 		/* Kích thước của dropdown */
 		.dropdown-toggle {
-			font-size: 18px;
+			font-size: 15px;
 		}
 
 		/* Thêm hiệu ứng cho dropdown */
@@ -385,3 +404,50 @@
 			visibility: visible;
 		}
 	</style>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const hash = window.location.hash;
+        if (hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                setTimeout(() => {
+                    target.scrollIntoView({ behavior: "smooth" });
+                }, 100); // Delay để chắc chắn phần tử đã render
+            }
+        }
+    });
+</script>
+<script>
+$(document).ready(function() {
+    // Khi người dùng nhấn nút "Quick View"
+    $('.quick-view').on('click', function() {
+        var productId = $(this).data('id'); // Lấy id sản phẩm
+
+        // Gửi AJAX request để lấy thông tin sản phẩm
+        $.ajax({
+            url: '/quick-view/' + productId, // Địa chỉ API để lấy dữ liệu sản phẩm
+            method: 'GET',
+            success: function(response) {
+                // Hiển thị thông tin sản phẩm vào modal
+                $('#quick-view-content').html(response);
+                $('#quick-view-modal').show(); // Hiển thị modal
+            },
+            error: function() {
+                alert('Không thể tải thông tin sản phẩm.');
+            }
+        });
+    });
+
+    // Đóng modal khi nhấn vào dấu "X"
+    $('.close').on('click', function() {
+        $('#quick-view-modal').hide();
+    });
+});
+</script>
+<x-quick-view-modal/>
+
+
+
+

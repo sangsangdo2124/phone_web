@@ -72,11 +72,26 @@
     <!-- Sidebar -->
     <div class="sidebar p-4">
         <h4 class="text-white mb-4">EGO MOBILE</h4>
-        <a href="#" class="active"><i class="bi bi-speedometer2"></i> Dashboard</a>
-        <a href="{{route('listproducts')}}"><i class="bi bi-box-seam"></i> Sản phẩm</a>
-        <a href="#"><i class="bi bi-cart4"></i> Đơn hàng</a>
-        <a href="#"><i class="bi bi-people-fill"></i> Khách hàng</a>
-        <a href="#"><i class="bi bi-gear-fill"></i> Cài đặt</a>
+        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <a href="{{ route('listproducts') }}" class="{{ request()->routeIs('listproducts') ? 'active' : '' }}">
+            <i class="bi bi-box-seam"></i> Sản phẩm
+        </a>
+
+        <a href="{{ route('orders') }}" class="{{ request()->routeIs('orders') ? 'active' : '' }}">
+            <i class="bi bi-cart4"></i> Đơn hàng
+        </a>
+
+        <a href="{{ route('customers') }}" class="{{ request()->routeIs('customers') ? 'active' : '' }}">
+            <i class="bi bi-people-fill"></i> Khách hàng
+        </a>
+
+        <a href="{{ route('settings') }}" class="{{ request()->routeIs('settings') ? 'active' : '' }}">
+            <i class="bi bi-gear-fill"></i> Cài đặt
+        </a>
+
     </div>
 
     <!-- Content -->

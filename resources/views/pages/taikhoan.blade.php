@@ -97,7 +97,7 @@
             @endif
 
             <!-- Avatar -->
-            <img src="{{ asset('storage/profile/' . $user->profile_photo_path) }}" class="avatar" alt="Avatar">
+            <img class="avatar" alt="Avatar"   src="{{ $user->profile_photo_path ? asset('storage/profile/' . $user->profile_photo_path) : asset('img/default-avatar.jpg')}}"width ="70">
 
             <h4 class="mb-3">{{ $user->name }}</h4>
 

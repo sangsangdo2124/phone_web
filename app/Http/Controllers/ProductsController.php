@@ -16,20 +16,12 @@ class ProductsController extends Controller
         return view("pages.home", compact("data"));
     }
 
-    function giaodiendangnhap()
-    {
-
-        return view("pages.giaodiendangnhap");
-    }
 
     function products($id)
     {
         $data = DB::select("select * from san_pham where id = ?", [$id])[0];
         return view("pages.products", compact("data"));
     }
-
-
-
 
 
 
@@ -172,7 +164,8 @@ class ProductsController extends Controller
         }
         return view("pages.thankyou", [
             'ngay_giao_du_kien' => now()->addDays(3)->format('d/m/Y')
-        ]);    }
+        ]);   
+     }
 
     public function cartCount()
     {

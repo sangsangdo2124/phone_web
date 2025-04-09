@@ -70,7 +70,8 @@
 
             <div class="media">
                         <div class="media-left">
-                           <img class="avatar" alt="Avatar" src="{{ asset('storage/profile/' . $user->profile_photo_path) }}"width ="70">
+                    
+                           <img class="avatar" alt="Avatar"   src="{{ $user->profile_photo_path ? asset('storage/profile/' . $user->profile_photo_path) : asset('img/default-avatar.jpg')}}"width ="70">
                         </div>
                         <div class="media-body">
                         

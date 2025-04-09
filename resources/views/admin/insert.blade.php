@@ -20,7 +20,7 @@
             <td><textarea rows="10" name="mo_ta" style="resize: none"></textarea></td>
         </tr>
         <tr>
-            <td>Giá bánbán</td>
+            <td>Giá bán</td>
             <td><input type="text" name="gia_ban"></td>
         </tr>
         <tr>

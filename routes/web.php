@@ -28,7 +28,7 @@ require __DIR__.'/auth.php';
 
 
 //SANG SANG
-Route::get('/redirect',[HomeController::class,'redirect'] );
+Route::get('/redirect',[HomeController::class,'redirect'] )->name('redirect');
 
 Route::get('/','App\Http\Controllers\HomeController@index');// Hiển thị section sản phẩm mới nhất trong trang chủ
 

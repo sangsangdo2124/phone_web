@@ -176,7 +176,7 @@
 			<div id="responsive-nav">
 				
         <!-- NAV -->
-				<!--ul class="main-nav nav navbar-nav">
+				<ul class="main-nav nav navbar-nav">
 					<li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Sản phẩm <i class="fa fa-caret-down"></i></a>
@@ -203,7 +203,7 @@
 						</ul>
 					</li>
 					<li><a href="{{ url('/') }}#new-products">Sản phẩm mới nhất</a></li>
-				</ul-->
+				</ul>
 				<!-- /NAV -->
 
 			</div>

@@ -34,10 +34,11 @@ class AdminController extends Controller
                 'id_phan_loai' => ['required', 'exists:phan_loai,id'],
                 'id_hang_sx' => ['required', 'exists:nha_san_xuat,id'],
                 'hinh_anh_chinh' => ['nullable', 'image'],
+                'is_new' => ['required', 'in:0,1'],
             ]);
     
             $data = $request->except('_token');
-    
+            $data['is_new'] = $request->input('is_new') == '1' ? 1 : 0;
             if ($action == 'edit') {
                 $data = $request->except('_token', 'id');
             }

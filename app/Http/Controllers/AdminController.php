@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\PhanLoai;
-use App\Models\Product;
+use App\Models\ThongKe;
+use App\Models\OrderId;
+use Carbon\Carbon;
 class AdminController extends Controller
 {
     function listproducts(){
@@ -65,5 +66,62 @@ class AdminController extends Controller
             }
     
             return redirect()->route('listproducts')->with('status', $message);
+        }
+
+
+        public function layDuLieuThongKe(Request $request)
+        {
+            $thoigian = $request->input('thoigian', '');
+            $now = Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
+    
+            switch ($thoigian) {
+                case '7ngay':
+                    $subdays = Carbon::now('Asia/Ho_Chi_Minh')->subDays(7)->toDateString();
+                    break;
+                case '28ngay':
+                    $subdays = Carbon::now('Asia/Ho_Chi_Minh')->subDays(28)->toDateString();
+                    break;
+                case '90ngay':
+                    $subdays = Carbon::now('Asia/Ho_Chi_Minh')->subDays(90)->toDateString();
+                    break;
+                case '365ngay':
+                default:
+                    $subdays = Carbon::now('Asia/Ho_Chi_Minh')->subDays(365)->toDateString();
+                    break;
+            }
+            // Lấy danh sách đơn hàng đã xử lý trong khoảng thời gian
+            $orders = DB::table('don_hang')
+                ->where('tinh_trang', 1)
+                ->whereBetween('ngay_dat_hang', [$subdays, $now])
+                ->select('ma_don_hang', DB::raw('DATE(ngay_dat_hang) as ngaydat'))
+                ->get();
+    
+            foreach ($orders as $order) {
+                $orderId = $order->ma_don_hang;
+                $ngaydat = $order->ngaydat;
+    
+                // Nếu chưa thống kê đơn này
+                if (!OrderId::where('order_id', $orderId)->exists()) {
+                    // Tính tổng doanh thu của đơn đó
+                    $doanhthu = DB::table('chi_tiet_don_hang')
+                        ->where('ma_don_hang', $orderId)
+                        ->select(DB::raw('SUM(so_luong * don_gia) as tong'))
+                        ->value('tong');
+    
+                    $thongke = ThongKe::firstOrNew(['ngaydat' => $ngaydat]);
+                    $thongke->donhang = ($thongke->donhang ?? 0) + 1;
+                    $thongke->doanhthu = ($thongke->doanhthu ?? 0) + $doanhthu;
+                    $thongke->save();
+    
+                    OrderId::create(['order_id' => $orderId]);
+                }
+            }
+    
+            // Trả dữ liệu về biểu đồ
+            $chartData = ThongKe::whereBetween('ngaydat', [$subdays, $now])
+                ->orderBy('ngaydat')
+                ->get(['ngaydat as date', 'donhang as order', 'doanhthu as sales']);
+    
+            return response()->json($chartData);
         }
 }

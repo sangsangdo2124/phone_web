@@ -134,14 +134,13 @@
 									<i class="fa fa-shopping-cart"></i>
 									<span>Giỏ hàng</span>
 									<div class="qty" id='cart-number-product'>
-				@php $cartCount = 0;
-					if (Auth::check()) {
-						$cartCount = DB::table('cart_items')->where('user_id', Auth::id())->count();
-					} elseif (session()->has('cart')) {
-						$cartCount = count(session('cart'));
-					}
-				@endphp
-
+										@php $cartCount = 0;
+											if (Auth::check()) {
+												$cartCount = DB::table('cart_items')->where('user_id', Auth::id())->count();
+											} elseif (session()->has('cart')) {
+												$cartCount = count(session('cart'));
+											}
+										@endphp
 										<span id="cart-count">{{ $cartCount }}</span>
 									</div>
 								</a>
@@ -421,6 +420,7 @@
 			$('.dropdown-toggle').dropdown();
 		});
 	</script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const hash = window.location.hash;

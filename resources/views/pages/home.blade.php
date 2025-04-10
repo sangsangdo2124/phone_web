@@ -115,6 +115,8 @@
 													</div>
 
 													<div class="add-to-cart d-flex flex-column gap-2" style="min-height: 90px;">
+														
+
 														<form method="POST" action="{{ route('Muangay') }}">
 															@csrf
 															<input type="hidden" name="id" value="{{ $product->id }}">

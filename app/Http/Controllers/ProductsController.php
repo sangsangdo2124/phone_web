@@ -100,21 +100,22 @@ class ProductsController extends Controller
         return view("pages.order", compact("quantity", "data"));
     }
 
+
     public function Muangay(Request $request)
     {
         $request->validate([
-            "id" => ["required", "numeric"]
+            "id" => ["required", "numeric"],
+            "so_luong" => ["nullable", "numeric", "min:1"]
         ]);
 
         $id = $request->id;
+        $soLuong = $request->so_luong ?? 1; // Nếu không truyền thì mặc định là 1
 
-        // Tạo session tạm cho sản phẩm mua ngay
         session()->put('muangay', [
             'id' => $id,
-            'so_luong' => 1
+            'so_luong' => $soLuong
         ]);
 
-        // Chuyển hướng đến trang thanh toán
         return redirect()->route('checkout');
     }
 
@@ -143,54 +144,91 @@ class ProductsController extends Controller
         $data = [];
         $quantity = [];
 
+
+
         if (Auth::check()) {
-            $cartItems = DB::table('cart_items')->where('user_id', Auth::id())->get();
-
-            if ($cartItems->count()) {
-                $order = [
-                    "ngay_dat_hang" => DB::raw("now()"),
-                    "tinh_trang" => 1,
-                    "hinh_thuc_thanh_toan" => $request->hinh_thuc_thanh_toan,
-                    "user_id" => Auth::id(),
-                    "ten_KH" => $request->name,
-                    "dia_chi_KH" => $request->dia_chi,
-                    "sdt_KH" => $request->phone
-                ];
-
-                DB::transaction(function () use ($order, $cartItems, &$data, &$quantity) {
-                    $id_don_hang = DB::table("don_hang")->insertGetId($order);
-
-                    $productIds = $cartItems->pluck('san_pham_id')->toArray();
-                    $data = DB::table("san_pham")->whereIn("id", $productIds)->get();
-
-                    foreach ($cartItems as $item) {
-                        $quantity[$item->san_pham_id] = $item->so_luong;
-                    }
-
-                    $detail = [];
-                    foreach ($data as $row) {
-                        $detail[] = [
+            
+            //Thêm đoạn này
+            if (session()->has('muangay')) {
+                $muangay = session()->get('muangay');
+                $product = DB::table('san_pham')->where('id', $muangay['id'])->first();
+    
+                if ($product) {
+                    $order = [
+                        "ngay_dat_hang" => now(),
+                        "tinh_trang" => 1,
+                        "hinh_thuc_thanh_toan" => $request->hinh_thuc_thanh_toan,
+                        "user_id" => Auth::id(),
+                        "ten_KH" => $request->name,
+                        "dia_chi_KH" => $request->dia_chi,
+                        "sdt_KH" => $request->phone
+                    ];
+    
+                    DB::transaction(function () use ($order, $product, $muangay) {
+                        $id_don_hang = DB::table("don_hang")->insertGetId($order);
+    
+                        DB::table("chi_tiet_don_hang")->insert([
                             "ma_don_hang" => $id_don_hang,
-                            "product_id" => $row->id,
-                            "so_luong" => $quantity[$row->id],
-                            "don_gia" => $row->gia_ban
-                        ];
-                    }
+                            "product_id" => $product->id,
+                            "so_luong" => $muangay['so_luong'],
+                            "don_gia" => $product->gia_ban
+                        ]);
+                    });
+    
+                    // Xoá session "muangay" sau khi đặt hàng
+                    session()->forget('muangay');
+                }
 
-                    DB::table("chi_tiet_don_hang")->insert($detail);
-                    DB::table("cart_items")->where('user_id', Auth::id())->delete();
-                    // Xoá biến giỏ hàng để không truyền về view
-                    $data = [];
-                    $quantity = [];
-                });
+            } else {
+
+                // Ngược lại: đặt hàng từ giỏ hàng như trước
+                $cartItems = DB::table('cart_items')->where('user_id', Auth::id())->get();
+
+                if ($cartItems->count()) {
+                    $order = [
+                        "ngay_dat_hang" => DB::raw("now()"),
+                        "tinh_trang" => 1,
+                        "hinh_thuc_thanh_toan" => $request->hinh_thuc_thanh_toan,
+                        "user_id" => Auth::id(),
+                        "ten_KH" => $request->name,
+                        "dia_chi_KH" => $request->dia_chi,
+                        "sdt_KH" => $request->phone
+                    ];
+
+                    DB::transaction(function () use ($order, $cartItems, &$data, &$quantity) {
+                        $id_don_hang = DB::table("don_hang")->insertGetId($order);
+
+                        $productIds = $cartItems->pluck('san_pham_id')->toArray();
+                        $data = DB::table("san_pham")->whereIn("id", $productIds)->get();
+
+                        foreach ($cartItems as $item) {
+                            $quantity[$item->san_pham_id] = $item->so_luong;
+                        }
+
+                        $detail = [];
+                        foreach ($data as $row) {
+                            $detail[] = [
+                                "ma_don_hang" => $id_don_hang,
+                                "product_id" => $row->id,
+                                "so_luong" => $quantity[$row->id],
+                                "don_gia" => $row->gia_ban
+                            ];
+                        }
+
+                        DB::table("chi_tiet_don_hang")->insert($detail);
+                        DB::table("cart_items")->where('user_id', Auth::id())->delete();
+                        // Xoá biến giỏ hàng để không truyền về view
+                        $data = [];
+                        $quantity = [];
+                    });
+                }
+
             }
-
-        }
-        return view("pages.thankyou", [
-            'ngay_giao_du_kien' => now()->addDays(3)->format('d/m/Y')
-        ]);   
+            return view("pages.thankyou", [
+                'ngay_giao_du_kien' => now()->addDays(3)->format('d/m/Y')
+            ]);   
     }
-
+}
 
 
     public function cartCount()
@@ -219,6 +257,7 @@ class ProductsController extends Controller
                 $data[] = $product;
                 $quantity[$product->id] = $muangay['so_luong'];
             }
+            
         } elseif (Auth::check()) {
             $cartItems = DB::table('cart_items')->where('user_id', Auth::id())->get();
 

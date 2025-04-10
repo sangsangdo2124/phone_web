@@ -60,10 +60,11 @@
 
 
                             <div class="d-flex flex-row gap-2 mt-3 align-items-center">
-                                <form method="POST" action="{{ route('Muangay') }}" class="m-0 p-0" style="display: inline;">
+                                <form method="POST" action="{{ route('Muangay') }}" class="m-0 p-0" style="display: inline;" id="muangay-form">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $data->id }}">
-                                    <button type="submit" class="add-to-cart-btn add-product">
+                                    <input type="hidden" name="so_luong" id="muangay-quantity">
+                                    <button type="submit" class="add-to-cart-btn">
                                         <i class="fa fa-bolt"></i> Mua ngay
                                     </button>
                                 </form>
@@ -130,49 +131,10 @@
         });
     </script>
 <script>
-  $(document).ready(function(){
-    $(".add-product").click(function(){
-      id = $(this).attr("sp_id");
-      num = 1;
-      $.ajax({
-      type:"POST",
-      dataType:"json",
-      url: "{{route('cartadd')}}",
-      data:{"_token": "{{ csrf_token() }}","id":id,"num":num},
-      beforeSend:function(){
-      },
-      success:function(data){
-      $("#cart-number-product").html(data);
-      },
-      error: function (xhr,status,error){
-      },
-      complete: function(xhr,status){
-      }
-      });
-    });
-  });
-</script>
-<script>
-    $(document).ready(function(){
-        $(".add-product").click(function(){
-        
-            id = "{{$data->id}}";
-            num = $("#product-number").val()
-            $.ajax({
-                type:"POST",
-                dataType:"json",
-                url: "{{route('cartadd')}}",
-                data:{"_token": "{{ csrf_token() }}","id":id,"num":num},
-                beforeSend:function(){
-                },
-                success:function(data){
-                    $("#cart-number-product").html(data);
-                },
-                error: function (xhr,status,error){
-                },
-                complete: function(xhr,status){
-                }
-            });
+    $(document).ready(function () {
+        $('#muangay-form').on('submit', function () {
+            let quantity = $('#product-number').val();
+            $('#muangay-quantity').val(quantity);
         });
     });
 </script>

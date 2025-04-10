@@ -54,8 +54,8 @@ class ProductsController extends Controller
                     'user_id' => $userId,
                     'san_pham_id' => $id,
                     'so_luong' => $num,
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'created_at' => DB::raw("now()"),
+                    'updated_at' => DB::raw("now()"),
                 ]);
             }
 
@@ -155,7 +155,7 @@ class ProductsController extends Controller
     
                 if ($product) {
                     $order = [
-                        "ngay_dat_hang" => now(),
+                        "ngay_dat_hang" => DB::raw("now()"),
                         "tinh_trang" => 1,
                         "hinh_thuc_thanh_toan" => $request->hinh_thuc_thanh_toan,
                         "user_id" => Auth::id(),

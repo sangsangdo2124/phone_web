@@ -150,17 +150,17 @@ class ProductsController extends Controller
 
     $product = Product::findOrFail($id);
 
-    // Update thông tin cơ bản
-    $product->id = $request->input('id'); // Cập nhật ID (ít dùng nhưng bạn yêu cầu)
+    //Chinh sua thong tin co ban
+    $product->id = $request->input('id');
     $product->ten_san_pham = $request->input('ten_san_pham');
     $product->mo_ta = $request->input('mo_ta');
     $product->gia_ban = $request->input('gia_ban');
 
-    // Nếu có upload ảnh mới
+    //Upload anh moi
     if ($request->hasFile('hinh_anh_chinh')) {
         $image = $request->file('hinh_anh_chinh');
         $imageName = time().'_'.$image->getClientOriginalName();
-        $image->move(public_path('images/products'), $imageName);
+        $image->move(public_path('img'), $imageName);
 
         $product->hinh_anh_chinh = $imageName;
     }

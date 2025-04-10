@@ -23,9 +23,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
+Route::get('/redirect', [HomeController::class, 'redirect'])->name('redirect');
 
-
-Route::get('/redirect',[HomeController::class,'redirect'] );
 
 Route::get('/', [HomeController::class, 'index']);  // Hiển thị sản phẩm mới nhất
 Route::get('/category/{categoryId}', [CategoryController::class, 'show']);  // Hiển thị sản phẩm theo danh mục
@@ -45,4 +44,16 @@ Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate
 
 // Định nghĩa route cho trang quản lý
 Route::get('/redirect/products','App\Http\Controllers\AdminController@listproducts')->name('listproducts');
-Route::get('/redirect/products/insert','App\Http\Controllers\AdminController@insert')->name('products.insert');
+
+Route::get('/product/insert', [AdminController::class, 'productinsert'])->name('productinsert');
+
+Route::post('/product/save/{action}', [AdminController::class, 'productSave'])->name('productsave');
+
+
+Route::post('/load-thongke', [AdminController::class, 'layDuLieuThongKe'])->name('load.dashboard');
+    
+    Route::get('/orders', [AdminController::class, 'listOrders'])->name('orders');
+
+    Route::get('/customers', [AdminController::class, 'listCustomers'])->name('customers');
+
+    Route::get('/settings', [AdminController::class, 'settings'])->name('settings');

@@ -151,7 +151,10 @@ class ProductsController extends Controller
                     "ngay_dat_hang" => DB::raw("now()"),
                     "tinh_trang" => 1,
                     "hinh_thuc_thanh_toan" => $request->hinh_thuc_thanh_toan,
-                    "user_id" => Auth::id()
+                    "user_id" => Auth::id(),
+                    "ten_KH" => $request->name,
+                    "dia_chi_KH" => $request->dia_chi,
+                    "sdt_KH" => $request->phone
                 ];
 
                 DB::transaction(function () use ($order, $cartItems, &$data, &$quantity) {

@@ -57,27 +57,27 @@ Route::get('/home/products/{id}','App\Http\Controllers\ProductsController@produc
 
 
 
-Route::get('/order','App\Http\Controllers\ProductsController@order')->name('order');
+Route::get('/order','App\Http\Controllers\ProductsController@order')->middleware('auth')->name('order');
 
-Route::post('/cart/add','App\Http\Controllers\ProductsController@cartadd')->name('cartadd');
+Route::post('/cart/add','App\Http\Controllers\ProductsController@cartadd')->middleware('auth')->name('cartadd');
 
-Route::post('/cart/delete','App\Http\Controllers\ProductsController@cartdelete')->name('cartdelete');
+Route::post('/cart/delete','App\Http\Controllers\ProductsController@cartdelete')->middleware('auth')->name('cartdelete');
 
-Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate')
+Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate')->middleware('auth')
 ->name('ordercreate');
 
-Route::post('/Muangay', [ProductsController::class, 'Muangay'])->name('Muangay');
+Route::post('/Muangay', [ProductsController::class, 'Muangay'])->middleware('auth')->name('Muangay');
 
 
 
 
-Route::get('/cart/count','App\Http\Controllers\ProductsController@cartCount')->name('cart.count');
+Route::get('/cart/count','App\Http\Controllers\ProductsController@cartCount')->middleware('auth')->name('cart.count');
 
-Route::get('/checkout','App\Http\Controllers\ProductsController@checkout')->name('checkout');
+Route::get('/checkout','App\Http\Controllers\ProductsController@checkout')->middleware('auth')->name('checkout');
 
-Route::post('/placeorder','App\Http\Controllers\ProductsController@placeorder')->name('placeorder');
+Route::post('/placeorder','App\Http\Controllers\ProductsController@placeorder')->middleware('auth')->name('placeorder');
 
-Route::get('/thankyou','App\Http\Controllers\ProductsController@thankyou')->name('thankyou');
+Route::get('/thankyou','App\Http\Controllers\ProductsController@thankyou')->middleware('auth')->name('thankyou');
 
 Route::get('/accountpanel','App\Http\Controllers\AccountController@accountpanel')->middleware('auth')->name('accountpanel');
 Route::get('/taikhoan','App\Http\Controllers\AccountController@taikhoan')->middleware('auth')->name('taikhoan');

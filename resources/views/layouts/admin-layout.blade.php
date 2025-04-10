@@ -5,12 +5,10 @@
     <title>@yield('title', 'Trang quản trị')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    {{-- Bootstrap & Icon --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    {{-- Custom CSS --}}
+    
     <style>
         body {
             background: #f1f4f9;
@@ -72,7 +70,7 @@
     <!-- Sidebar -->
     <div class="sidebar p-4">
         <h4 class="text-white mb-4">EGO MOBILE</h4>
-        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+        <a href="{{ route('redirect') }}" class="{{ request()->routeIs('redirect') ? 'active' : '' }}">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
 
@@ -114,8 +112,12 @@
         </div>
         <div class="p-4">
             @yield('content')
+
+
         </div>
     </div>
 </div>
+@yield('scripts')
+
 </body>
 </html>

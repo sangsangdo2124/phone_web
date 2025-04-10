@@ -57,6 +57,7 @@ Route::post('/cart/delete','App\Http\Controllers\ProductsController@cartdelete')
 Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate')
 ->middleware('auth')->name('ordercreate');
 
+Route::get('/san-pham', [CategoryController::class, 'filterByLoai']);
 
 
 

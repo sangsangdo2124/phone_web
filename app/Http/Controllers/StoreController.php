@@ -20,6 +20,7 @@ class StoreController extends Controller
     {
         $categoryFilter = $request->query('category');
         $brandFilter = $request->query('brand');
+        $searchTerm = $request->query('search');
     
         $categories = DB::table('phan_loai')->get();
         $brands = DB::table('nha_san_xuat')->get();
@@ -27,15 +28,20 @@ class StoreController extends Controller
         $query = DB::table('san_pham');
     
         if ($categoryFilter) {
-            $query->where('id_phan_loai', $categoryFilter); // Lọc theo danh mục
+            $query->where('id_phan_loai', $categoryFilter);
         }
     
         if ($brandFilter) {
-            $query->where('id_hang_sx', $brandFilter); // Lọc theo thương hiệu
+            $query->where('id_hang_sx', $brandFilter);
         }
     
-        $products = $query->paginate(9);
+        if ($searchTerm) {
+            $query->where('ten_san_pham', 'LIKE', '%' . $searchTerm . '%');
+        }
+    
+        $products = $query->paginate(9)->appends($request->query()); // giữ lại query khi phân trang
     
         return view('pages.allproducts', compact('products', 'categories', 'brands'));
     }
+    
 }    

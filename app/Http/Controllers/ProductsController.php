@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Book;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -128,6 +128,14 @@ class ProductsController extends Controller
             });
         }
         return view("pages.order", compact('data', 'quantity'));
+    }
+
+    public function chitiet($id)
+    {
+        $data = Product::where('id', $id)->first();
+
+        //$data = collect([$sanpham]); // hoặc [$sanpham] nếu không cần Collection
+        return view('pages.chitiet', compact('data'));
     }
 
     function lichsuht()

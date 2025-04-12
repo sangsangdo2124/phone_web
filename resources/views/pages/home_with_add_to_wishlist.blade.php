@@ -127,12 +127,12 @@ complete: function(xhr,status){
 															@endfor
 														</div>
 														
-														<div class="product-btns">
+<div class="product-btns">
 															<form method="POST" action="{{ route('wishlistadd') }}" style="display:inline">
-																@csrf
-																<input type="hidden" name="id" value="{{ $product->id }}">
-																<button class="add-to-wishlist" type="submit"><i class="fa fa-heart-o"></i></button>
-															</form>
+    @csrf
+    <input type="hidden" name="id" value="{{ $product->id }}">
+    <button class="add-to-wishlist" type="submit"><i class="fa fa-heart-o"></i></button>
+</form>
 															<button class="add-to-compare"><i class="fa fa-exchange"></i></button>
 															<button class="quick-view"><i class="fa fa-eye"></i></button>
 														</div>

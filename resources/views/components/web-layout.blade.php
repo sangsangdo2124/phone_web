@@ -123,7 +123,7 @@
 						<div class="header-ctn">
 							<!--Danh sách yêu thích -->
 							<div>
-								<a href="#">
+								<a href="{{ route('wishlist') }}">
 									<i class="fa fa-heart-o"></i>
 									<span>Yêu thích</span>
 									<div class="qty">0<!--code để lấy số lượng--></div>

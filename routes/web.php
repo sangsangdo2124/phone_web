@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +33,7 @@ Route::get('/category/{categoryId}', [CategoryController::class, 'show']);  // H
 
 Route::get('/giaodiendangnhap','App\Http\Controllers\ProductsController@giaodiendangnhap'); //route hiện giao diện đăng nhập
 
-//Route::get('/home/chitiet/{id}','App\Http\Controllers\ProductsController@chitiet');// hiện chi tiết sản phẩm
+Route::get('/home/chitiet/{id}','App\Http\Controllers\ProductsController@chitiet')->name('chitiet');// hiện chi tiết sản phẩm
 
 Route::get('/home/products/{id}','App\Http\Controllers\ProductsController@products')->name('products');// hiện chi tiết sản phẩm
 
@@ -52,3 +53,14 @@ Route::get('/lichsuht','App\Http\Controllers\ProductsController@lichsuht')->name
 Route::get('/thuonghieu','App\Http\Controllers\ProductsController@thuonghieu')->name('thuonghieu');
 Route::get('/csdoitra_baohanh','App\Http\Controllers\ProductsController@csdoitra_baohanh')->name('csdoitra_baohanh');
 Route::get('/tuvan','App\Http\Controllers\ProductsController@tuvan')->name('tuvan');
+
+//wishlist
+// Thêm sản phẩm vào danh sách yêu thích
+Route::post('/wishlist/add', 'App\Http\Controllers\WishlistController@store')
+->middleware('auth')->name('wishlistadd');
+
+// Hiển thị danh sách sản phẩm yêu thích
+Route::get('/wishlist', 'App\Http\Controllers\WishlistController@index')->name('wishlist');
+
+// Xóa sản phẩm khỏi danh sách yêu thích
+Route::post('/wishlist/delete', 'App\Http\Controllers\WishlistController@delete')->name('wishlistdelete');

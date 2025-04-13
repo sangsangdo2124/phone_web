@@ -32,7 +32,7 @@
                             </div>
                         </button>
                     </x-slot>
-
+                    <a class="dropdown-item" href="{{route('adminquanly')}}">Quản lý</a>
                     <x-slot name="content">
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\Book;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Product;  // Model Product
@@ -20,7 +19,13 @@ class HomeController extends Controller
 
         if($usertype == "1")
         {
-        return view('admin.dashb'); // Trang admin
+            $collections = PhanLoai::all();
+            $latestProducts = Product::where('is_new', 1)->get();
+            // Gom nhóm sản phẩm theo phân loại
+            $groupedProducts = $latestProducts->groupBy('id_phan_loai');
+    
+            // Truyền dữ liệu vào view
+            return view('admin.TrangChu', compact('collections','groupedProducts','latestProducts'));
         }
         else 
         {
@@ -28,7 +33,6 @@ class HomeController extends Controller
            
         }
     }
-    
     // Hiển thị sản phẩm mới nhất
     public function index()
     {
@@ -36,7 +40,7 @@ class HomeController extends Controller
         $collections = PhanLoai::all();
         $latestProducts = Product::where('is_new', 1)->get();
         // Gom nhóm sản phẩm theo phân loại
-    $groupedProducts = $latestProducts->groupBy('id_phan_loai');
+        $groupedProducts = $latestProducts->groupBy('id_phan_loai');
 
         // Truyền dữ liệu vào view
         return view('pages.home', compact('collections','groupedProducts','latestProducts'));

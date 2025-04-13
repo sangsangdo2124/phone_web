@@ -78,7 +78,7 @@
             <i class="bi bi-box-seam"></i> Sản phẩm
         </a>
 
-        <a href="{{ route('orders') }}" class="{{ request()->routeIs('orders') ? 'active' : '' }}">
+        <a href="{{ route('orders.list') }}" class="{{ request()->routeIs('orders.list') ? 'active' : '' }}">
             <i class="bi bi-cart4"></i> Đơn hàng
         </a>
 

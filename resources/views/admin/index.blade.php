@@ -42,7 +42,7 @@
                 <tr>
                     <td>{{ $product->id }}</td>
                     <td>{{ $product->ten_san_pham }}</td>
-                    <td>{{ $product->mo_ta }}</td>
+                    <td style="max-width: 350px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $product->mo_ta }}</td>
                     <td>{{ $product->gia_ban }}</td>
                     <td><img src="{{ asset('img/' . $product->hinh_anh_chinh) }}" width="50px"></td>
                     <td>

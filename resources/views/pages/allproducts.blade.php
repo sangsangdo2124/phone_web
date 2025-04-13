@@ -34,9 +34,15 @@
                                     <div id="quick-view-container"></div>
                                 </div>
                             </div>
-                            <div class="add-to-cart">
-                                <button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ</button>
+                            <div class="add-to-cart d-flex flex-column gap-2" style="min-height: 90px;">
+                              <form method="POST" action="{{ route('Muangay') }}">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $product->id }}">
+                                <button type="submit" class="add-to-cart-btn add-product">Mua ngay</button>
+                              </form>
+                              <button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng</button>
                             </div>
+
                         </div>
                     </div>
                 @endforeach

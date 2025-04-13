@@ -167,14 +167,14 @@ class ProductsController extends Controller
 
     $product->save();
 
-    return redirect()->route('products.edit', $product->id)->with('success', 'Cập nhật thành công!');
+    return redirect()->route('products.edit', $product->id)->with('sucess', 'Cập nhật thành công!');
     }
 
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
         $product->delete();
-        return redirect()->route('products.index')->with('success', 'Xoá thành công!');
+        return redirect()->route('products.index')->with('status', 'Xoá thành công!');
     }
 
     public function index()

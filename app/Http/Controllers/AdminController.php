@@ -180,6 +180,38 @@ class AdminController extends Controller
             return view('admin.order_detail', compact('order', 'orderDetails'));
         }
 
+        public function listCustomers()
+        {
+            $customers = DB::table('users')
+                ->leftJoin('don_hang', 'users.id', '=', 'don_hang.user_id')
+                ->where('users.usertype', '0')
+                ->select(
+                    'users.id',
+                    'users.name',
+                    'users.email',
+                    'users.phone',
+                    'users.dia_chi',
+                    'users.created_at',
+                    DB::raw('COUNT(don_hang.ma_don_hang) as so_don_hang')
+                )
+                ->groupBy('users.id', 'users.name', 'users.email', 'users.phone', 'users.dia_chi', 'users.created_at')
+                ->orderByDesc('users.created_at')
+                ->get();
+        
+            return view('admin.customers', compact('customers'));
+        }
+        public function listOrdersByUser($user_id)
+        {
+            $user = DB::table('users')->where('id', $user_id)->first();
 
+            $orders = DB::table('don_hang')
+                ->where('user_id', $user_id)
+                ->orderByDesc('ngay_dat_hang')
+                ->get();
+
+            return view('admin.customer_orders', compact('orders', 'user'));
+        }
+
+               
     
 }

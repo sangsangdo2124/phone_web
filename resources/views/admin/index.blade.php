@@ -46,10 +46,10 @@
                     <td>{{ $product->gia_ban }}</td>
                     <td><img src="{{ asset('img/' . $product->hinh_anh_chinh) }}" width="50px"></td>
                     <td>
-                        <a href="#" class='btn btn-sm btn-primary'>Sửa</a>
+                        <a href="{{route('products.edit', $product->id)}}" class='btn btn-sm btn-primary'>Sửa</a>
                     </td>
                     <td>
-                        <form action="#" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                        <form action="{{route('products.destroy', $product->id)}}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
                             @csrf
                             @method('DELETE')
                             <input type='submit' class='btn btn-sm btn-danger' value='Xóa'>

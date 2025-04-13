@@ -82,7 +82,7 @@
             <i class="bi bi-cart4"></i> Đơn hàng
         </a>
 
-        <a href="{{ route('customers') }}" class="{{ request()->routeIs('customers') ? 'active' : '' }}">
+        <a href="{{ route('customers.list') }}" class="{{ request()->routeIs('customers') ? 'active' : '' }}">
             <i class="bi bi-people-fill"></i> Khách hàng
         </a>
 

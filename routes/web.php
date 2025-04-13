@@ -58,9 +58,13 @@ Route::get('/orders/delete/{id}', [AdminController::class, 'delete'])->name('ord
 Route::put('/orders/update-status/{id}', [AdminController::class, 'updateOrderStatus'])->name('orders.updateStatus');
 Route::get('/orders/{id}/detail', [AdminController::class, 'orderDetail'])->name('orders.detail');
 
-    Route::get('/customers', [AdminController::class, 'listCustomers'])->name('customers');
+Route::get('/customers', [AdminController::class, 'listCustomers'])->name('customers.list');
+Route::get('/customers/orders/{user_id}', [AdminController::class, 'listOrdersByUser'])->name('customers.orders');
 
-    Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+// Hiển thị form sửa
+Route::get('admin/products/{id}/edit', 'App\Http\Controllers\ProductsController@edit')->name('products.edit');
+
 // Xử lý cập nhật sản phẩm
 Route::put('admin/products/{id}', 'App\Http\Controllers\ProductsController@update')->name('products.update');
 

@@ -7,7 +7,6 @@ use App\Models\Book;
 use App\Models\cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
 class ProductsController extends Controller
 {
 
@@ -16,6 +15,7 @@ class ProductsController extends Controller
         $data = DB::select("select * from san_pham order by gia_ban");
         return view("pages.home", compact("data"));
     }
+    
 
 
     function products($id)
@@ -274,6 +274,56 @@ class ProductsController extends Controller
         return view("pages.checkout", compact("data", "quantity", "user"));
     }
 
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('admin.edit', compact('product'));
+    }
+
+    public function update(Request $request, $id)
+    {
+    $request->validate([
+        'id' => 'required|integer',
+        'ten_san_pham' => 'required|string|max:255',
+        'mo_ta' => 'nullable|string',
+        'gia_ban' => 'required|numeric',
+        'hinh_anh_chinh' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
+
+    $product = Product::findOrFail($id);
+
+    //Chinh sua thong tin co ban
+    $product->id = $request->input('id');
+    $product->ten_san_pham = $request->input('ten_san_pham');
+    $product->mo_ta = $request->input('mo_ta');
+    $product->gia_ban = $request->input('gia_ban');
+
+    //Upload anh moi
+    if ($request->hasFile('hinh_anh_chinh')) {
+        $image = $request->file('hinh_anh_chinh');
+        $imageName = time().'_'.$image->getClientOriginalName();
+        $image->move(public_path('img'), $imageName);
+
+        $product->hinh_anh_chinh = $imageName;
+    }
+
+    $product->save();
+
+    return redirect()->route('products.edit', $product->id)->with('success', 'Cập nhật thành công!');
+    }
+
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return redirect()->route('products.index')->with('success', 'Xoá thành công!');
+    }
+
+    public function index()
+    {
+        $products = Product::all();
+        return view('admin.index', compact('products'));
+    }
 
      //Hàm để hiển thị Quick View
      public function quickView($id)

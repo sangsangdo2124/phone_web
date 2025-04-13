@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -45,4 +45,18 @@ Route::post('/cart/delete','App\Http\Controllers\ProductsController@cartdelete')
 
 Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate')
 ->middleware('auth')->name('ordercreate');
+
+// Định nghĩa route cho trang quản lý
+Route::get('/redirect/products','App\Http\Controllers\AdminController@listproducts')->name('listproducts');
+Route::get('/redirect/products/insert','App\Http\Controllers\AdminController@insert')->name('products.insert');
+// Hiển thị form sửa
+Route::get('admin/products/{id}/edit', 'App\Http\Controllers\ProductsController@edit')->name('products.edit');
+
+// Xử lý cập nhật sản phẩm
+Route::put('admin/products/{id}', 'App\Http\Controllers\ProductsController@update')->name('products.update');
+
+// Xử lý xoá sản phẩm
+Route::delete('admin/products/{id}', 'App\Http\Controllers\ProductsController@destroy')->name('products.destroy');
+Route::get('admin/products', 'App\Http\Controllers\ProductsController@index')->name('products.index');
+
 

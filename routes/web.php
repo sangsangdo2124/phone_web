@@ -49,10 +49,14 @@ Route::get('/product/insert', [AdminController::class, 'productinsert'])->name('
 
 Route::post('/product/save/{action}', [AdminController::class, 'productSave'])->name('productsave');
 
-
 Route::post('/load-thongke', [AdminController::class, 'layDuLieuThongKe'])->name('load.dashboard');
     
-    Route::get('/orders', [AdminController::class, 'listOrders'])->name('orders');
+Route::get('/orders', [AdminController::class, 'listOrders'])->name('orders.list');
+
+Route::post('/orders/update', [AdminController::class, 'update'])->name('orders.update');
+Route::get('/orders/delete/{id}', [AdminController::class, 'delete'])->name('orders.delete');
+Route::put('/orders/update-status/{id}', [AdminController::class, 'updateOrderStatus'])->name('orders.updateStatus');
+Route::get('/orders/{id}/detail', [AdminController::class, 'orderDetail'])->name('orders.detail');
 
     Route::get('/customers', [AdminController::class, 'listCustomers'])->name('customers');
 

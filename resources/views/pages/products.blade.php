@@ -2,86 +2,35 @@
     <x-slot name="title">
         Chi tiết
     </x-slot>
-    <style>
-        .product-name {
-            text-transform: uppercase;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .product-details .add-to-cart .qty-label {
-            display: inline-block;
-            font-weight: 500;
-            font-size: 12px;
-            text-transform: uppercase;
-            margin-right: 15px;
-            margin-bottom: 0px;
-        }
-
-
-        .product .product-body .product-price {
-            color: #D10024;
-            font-size: 18px;
-        }
-
-        .product .product-body .product-price .product-old-price {
-            font-size: 70%;
-            font-weight: 400;
-            color: #8D99AE;
-        }
-    </style>
-
-<script>
-$(document).ready(function(){
-$("#add-to-cart").click(function(){
-id = "{{$data->id}}";
-num = $("#product-number").val()
-$.ajax({
-type:"POST",
-dataType:"json",
-url: "{{route('cartadd')}}",
-data:{"_token": "{{ csrf_token() }}","id":id,"num":num},
-beforeSend:function(){
-},
-success:function(data){
-$("#cart-number-product").html(data);
-},
-error: function (xhr,status,error){
-},
-complete: function(xhr,status){
-}
-});
-});
-});
-</script>
-
+    
     <!-- BREADCRUMB -->
-    <div id="breadcrumb" class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="breadcrumb-tree">
-                        <li><a href="{{route('index')}}">Home</a></li>
-                        <li><a href="#">All Categories</a></li>
-                        <li><a href="#">Accessories</a></li>
-                        <li><a href="#">Headphones</a></li>
-                        <li class="active">Product name goes here</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
-    <!-- /BREADCRUMB -->
+		<div id="breadcrumb" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<ul class="breadcrumb-tree">
+							<li><a href="{{ url('/') }}">Home</a></li>
+							<li><a href="#">All Categories</a></li>
+							<li><a href="#">Accessories</a></li>
+							<li><a href="#">Headphones</a></li>
+							<li class="active"><a href="{{route('products', ['id' => $data->id])}}"></a></li>
+						</ul>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /BREADCRUMB -->
+    <!-- BREADCRUMB -->
 
     <div class="section">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 d-flex justify-content-center align-items-center">
-                    <img src="{{asset('img/' . $data->hinh_anh_chinh)}}" weight="500px" height="500px">
+                    <img src="{{asset('img/' . $data->hinh_anh_chinh)}}" width="500px" height="400px">
                 </div>
 
 
@@ -100,18 +49,35 @@ complete: function(xhr,status){
                         </div>
 
                         <div class="add-to-cart">
-                            <div class="qty-label"><br>
-                                Số lượng mua:
-                              
-                                    <input type="number" id='product-number' size='2' min="1" value="1">
-                                    <button class="add-to-cart-btn" id='add-to-cart'>Thêm vào giỏ hàng</button>
-                                
-
+                            <div class="qty-label">
+                                Số lượng:
+                                <div class="input-number" >
+                                    <input type="number" id="product-number" value="1" min="1">
+                                    <span class="qty-up">+</span>
+                                    <span class="qty-down">-</span>
+                                </div>
                             </div>
+
+
+                            <div class="d-flex flex-row gap-2 mt-3 align-items-center">
+                                <form method="POST" action="{{ route('Muangay') }}" class="m-0 p-0" style="display: inline;" id="muangay-form">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $data->id }}">
+                                    <input type="hidden" name="so_luong" id="muangay-quantity">
+                                    <button type="submit" class="add-to-cart-btn">
+                                        <i class="fa fa-bolt"></i> Mua ngay
+                                    </button>
+                                </form>
+
+                                <button class="add-to-cart-btn" id="add-to-cart">
+                                    <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
+                                </button>
+                            </div>
+                        </div>
                             
                         </div>
                         <ul class="product-btns">
-                            <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
+                            <li><a href="#"><i class="fa fa-heart-o"></i> Thêm vào danh sách yêu thích</a></li>
 
                         </ul>
 
@@ -124,7 +90,7 @@ complete: function(xhr,status){
                     <div id="product-tab">
                         <!-- product tab nav -->
                         <ul class="tab-nav">
-                            <li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li>
+                            <li><a data-toggle="tab" href="#tab3">Đánh giá (3)</a></li>
                         </ul>
                         <!-- /product tab nav -->
                     </div>
@@ -133,5 +99,42 @@ complete: function(xhr,status){
             </div>
         </div>
     </div>
-
 </x-web-layout>
+ <script>
+        var isLoggedIn = {{ Auth::check() ? 'true' : 'false' }} === true;
+
+        $(document).ready(function () {
+            $("#add-to-cart").click(function () {
+                if (!isLoggedIn) {
+                    $('#loginRequiredModal').modal('show');
+                    return;
+                }
+
+                let id = "{{$data->id}}";
+                let num = $("#product-number").val();
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "{{route('cartadd')}}",
+                    data: { "_token": "{{ csrf_token() }}", "id": id, "num": num },
+                    beforeSend: function () {
+                    },
+                    success: function (data) {
+                        $("#cart-number-product").html(data);
+                    },
+                    error: function (xhr, status, error) {
+                    },
+                    complete: function (xhr, status) {
+                    }
+                });
+            });
+        });
+    </script>
+<script>
+    $(document).ready(function () {
+        $('#muangay-form').on('submit', function () {
+            let quantity = $('#product-number').val();
+            $('#muangay-quantity').val(quantity);
+        });
+    });
+</script>

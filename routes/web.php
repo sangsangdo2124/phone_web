@@ -61,3 +61,9 @@ Route::get('/orders/{id}/detail', [AdminController::class, 'orderDetail'])->name
     Route::get('/customers', [AdminController::class, 'listCustomers'])->name('customers');
 
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+// Xử lý cập nhật sản phẩm
+Route::put('admin/products/{id}', 'App\Http\Controllers\ProductsController@update')->name('products.update');
+
+// Xử lý xoá sản phẩm
+Route::delete('admin/products/{id}', 'App\Http\Controllers\ProductsController@destroy')->name('products.destroy');
+Route::get('admin/products', 'App\Http\Controllers\ProductsController@index')->name('products.index');

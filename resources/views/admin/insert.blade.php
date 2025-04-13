@@ -21,7 +21,7 @@
     @if($action == "add")
         <div style='text-align:center;font-weight:bold;color:#15c;'>THÊM SẢN PHẨM</div>
     @else
-        <div style='text-align:center;font-weight:bold;color:#15c;'>SỬa SẢN PHẨM</div>
+        <div style='text-align:center;font-weight:bold;color:#15c;'>SỬA SẢN PHẨM</div>
     @endif
 
     <label>Mã sản phẩm</label>

@@ -7,8 +7,6 @@ use App\Models\Book;
 use App\Models\cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Product;
-
 class ProductsController extends Controller
 {
 

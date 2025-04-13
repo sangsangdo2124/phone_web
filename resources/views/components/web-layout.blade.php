@@ -65,7 +65,7 @@
 								<i class="fa fa-user-o"></i> {{ Auth::user()->name }}
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="#">Lịch sử mua hàng</a></li>
+								<li><a href="{{ route('accountpanel') }}">Tài khoản</a></li>
 								<li>
 									<form method="POST" action="{{ route('logout') }}">
 										@csrf
@@ -95,7 +95,7 @@
 					<!-- LOGO -->
 					<div class="col-md-3">
 						<div class="header-logo">
-							<a href="#" class="logo">
+							<a href="{{ url('/') }}" class="logo">
 								<img src="{{ asset('img/logo.png') }}" alt="Logo">
 							</a>
 						</div>
@@ -105,15 +105,11 @@
 					<!-- SEARCH BAR -->
 					<div class="col-md-6">
 						<div class="header-search">
-							<form>
-								<select class="input-select">
-									<option value="0">All Categories</option>
-									<option value="1">Category 01</option>
-									<option value="2">Category 02</option>
-								</select>
-								<input class="input" placeholder="Bạn cần tìm gì?">
-								<button class="search-btn">Tìm kiếm</button>
-							</form>
+						<form action="{{ route('pages.allproducts') }}" method="GET">
+    						<input class="input" type="text" name="search" placeholder="Bạn cần tìm gì?" value="{{ request('search') }}">
+    						<button type="submit" class="search-btn">Tìm kiếm</button>
+						</form>
+
 						</div>
 					</div>
 					<!-- /SEARCH BAR -->
@@ -132,18 +128,21 @@
 							<!-- /Danh sách yêu thích -->
 							
 							<!-- Cart -->
-							
 
-							<div class="dropdown" >
+
+							<div class="dropdown">
 								<a href="{{ route('order') }}">
 									<i class="fa fa-shopping-cart"></i>
 									<span>Giỏ hàng</span>
 									<div class="qty" id='cart-number-product'>
-										@if (session('cart'))
-											{{ count(session('cart')) }}
-										@else
-											0
-										@endif
+										@php $cartCount = 0;
+											if (Auth::check()) {
+												$cartCount = DB::table('cart_items')->where('user_id', Auth::id())->count();
+											} elseif (session()->has('cart')) {
+												$cartCount = count(session('cart'));
+											}
+										@endphp
+										<span id="cart-count">{{ $cartCount }}</span>
 									</div>
 								</a>
 							</div>
@@ -175,14 +174,38 @@
 		<div class="container">
 			<!-- responsive-nav -->
 			<div id="responsive-nav">
-				<!-- NAV -->
+				
+        <!-- NAV -->
 				<ul class="main-nav nav navbar-nav">
-					<li class="active"><a href="/">Trang chủ</a></li>
-					<li><a href="#">Sản phẩm</a></li>
-					<li><a href="#">Thương hiệu</a></li>
-					<li><a href="#">Phụ kiện công nghệ</a></li>
+					<li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Sản phẩm <i class="fa fa-caret-down"></i></a>
+						<ul class="dropdown-menu">
+							@foreach($categories as $category)
+								<li>
+									<a href="{{ route('pages.allproducts', ['category' => $category->id]) }}">
+										{{ $category->ten_loai_san_pham }}
+									</a>
+                				</li>
+            				@endforeach
+        				</ul>
+    				</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Thương hiệu <i class="fa fa-caret-down"></i></a>
+						<ul class="dropdown-menu">
+							@foreach($brands as $brand)
+								<li>
+									<a href="{{ route('pages.allproducts', ['brand' => $brand->id]) }}">
+										{{ $brand->ten_nha_san_xuat }}
+									</a>
+								</li>
+							@endforeach
+						</ul>
+					</li>
+					<li><a href="{{ url('/') }}#new-products">Sản phẩm mới nhất</a></li>
 				</ul>
 				<!-- /NAV -->
+
 			</div>
 			<!-- /responsive-nav -->
 		</div>
@@ -198,7 +221,7 @@
 		{{$slot}}
 	</div>
 	<!-- /SECTION -->
-
+	
 	<!-- NEWSLETTER -->
 	<div id="newsletter" class="section">
 		<!-- container -->
@@ -334,7 +357,62 @@
 	<script src="{{ asset('js/jquery.zoom.min.js') }}"></script>
 	<script src="{{ asset('js/main.js') }}"></script>
 	<!---->
+	<!-- /SECTION -->
 
+	<div class="modal fade" id="loginRequiredModal" tabindex="-1" role="dialog" data-backdrop="static"
+        data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content" style="border: 2px solid #D10024;">
+                <div class="modal-header" style="background-color: #D10024; color: #fff;">
+                    <button type="button" class="close" data-dismiss="modal" style="color: #fff;">&times;</button>
+                    <h4 class="modal-title" style="color: #fff; text-align: center;">Yêu cầu đăng nhập</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Vui lòng đăng nhập tài khoản để xem ưu đãi và thanh toán dễ dàng hơn.</p>
+                </div>
+                <div class="modal-footer text-center" style="justify-content: center;">
+                    <a href="{{ route('login') }}" class="btn btn-danger"
+                        style="background-color: #D10024; border: none;">Đăng nhập</a>
+                    <a href="{{ route('register') }}" class="btn btn-outline"
+                        style="border: 1px solid #D10024; color: #D10024; background: #fff;">Đăng ký</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<script>
+		var isLoggedIn = {{ Auth::check() ? 'true' : 'false' }}; // true/false
+
+		$(document).ready(function () {
+			$(".add-product").click(function (e) {
+				if (!isLoggedIn) {
+					$('#loginRequiredModal').modal('show');
+					e.preventDefault(); // Ngăn không cho tiếp tục
+					return;
+				}
+
+				// Nếu có logic thêm vào giỏ hàng bằng AJAX, bạn xử lý ở đây
+				let id = $(this).attr('sp_id');
+				let num = 1; // Mặc định số lượng là 1 hoặc có thể cho người dùng chọn
+
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					url: "{{route('cartadd')}}",
+					data: { "_token": "{{ csrf_token() }}", "id": id, "num": num },
+					beforeSend: function () {
+					},
+					success: function (data) {
+						$("#cart-number-product").html(data);
+					},
+					error: function (xhr, status, error) {
+					},
+					complete: function (xhr, status) {
+					}
+				});
+			});
+		});
+	</script>
 
 
 	<script type="text/javascript">
@@ -343,41 +421,45 @@
 			$('.dropdown-toggle').dropdown();
 		});
 	</script>
-	<style>
-		/* Tùy chỉnh dropdown đăng nhập*/
-		.dropdown-menu {
-			background-color: #333;
-			border: 2px solid #D10024 border-radius: 5px;
-			padding: 10px 0;
-			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-		}
 
-		/* Màu chữ và hover của item trong dropdown */
-		.dropdown-menu li a {
-			color: white;
-			padding: 10px 20px;
-			font-size: 16px;
-		}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const hash = window.location.hash;
+        if (hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                setTimeout(() => {
+                    target.scrollIntoView({ behavior: "smooth" });
+                }, 100); // Delay để chắc chắn phần tử đã render
+            }
+        }
+    });
+</script>
+<script>
+$(document).ready(function() {
+    // Khi người dùng nhấn nút "Quick View"
+    $('.quick-view').on('click', function() {
+        var productId = $(this).data('id'); // Lấy id sản phẩm
 
-		.dropdown-menu li a:hover {
-			background-color: #ff666f;
-			color: white;
-		}
+        // Gửi AJAX request để lấy thông tin sản phẩm
+        $.ajax({
+            url: '/quick-view/' + productId, // Địa chỉ API để lấy dữ liệu sản phẩm
+            method: 'GET',
+            success: function(response) {
+                // Hiển thị thông tin sản phẩm vào modal
+                $('#quick-view-content').html(response);
+                $('#quick-view-modal').show(); // Hiển thị modal
+            },
+            error: function() {
+                alert('Không thể tải thông tin sản phẩm.');
+            }
+        });
+    });
 
-		/* Kích thước của dropdown */
-		.dropdown-toggle {
-			font-size: 18px;
-		}
-
-		/* Thêm hiệu ứng cho dropdown */
-		.dropdown-menu {
-			transition: all 0.3s ease-in-out;
-			opacity: 0;
-			visibility: hidden;
-		}
-
-		.dropdown:hover .dropdown-menu {
-			opacity: 1;
-			visibility: visible;
-		}
-	</style>
+    // Đóng modal khi nhấn vào dấu "X"
+    $('.close').on('click', function() {
+        $('#quick-view-modal').hide();
+    });
+});
+</script>
+<x-quick-view-modal/>

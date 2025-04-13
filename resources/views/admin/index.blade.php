@@ -1,8 +1,15 @@
 @extends('layouts.admin-layout')
 
 @section('content')
+
 @if (session('success'))
     <div style="color: green;">{{ session('success') }}</div>
+
+@if (session('status'))
+<div class="alert alert-success">
+{{ session('status') }}
+</div>
+
 @endif
 <title>@yield('title', 'Quản lý sản phẩm')</title>
 <h3 style ="text-align: center">DANH SÁCH SẢN PHẨM</h3>
@@ -20,11 +27,9 @@
                 background-color: #f2f2f2;
             }
         </style>
-    <a href="{{route('products.insert')}}" class="them">
-        <input type="submit" value="Thêm sản phẩm" />
-    </a>
+    <a href="{{route('productinsert')}}" class='btn btn-sm btn-success mb-1'>Thêm sản phẩm</a>
 
-    <table style="width:100%" border="1">
+    <table class="table table-striped table-bordered" width="100%">
         <thead>
             <tr>
                 <th>Mã sản phẩm</th>
@@ -46,13 +51,15 @@
                     <td>{{ $product->gia_ban }}</td>
                     <td><img src="{{ asset('img/' . $product->hinh_anh_chinh) }}" width="50px"></td>
                     <td>
+
                     <a href="{{ route('products.edit', $product->id) }}">Sửa</a>
+
                     </td>
                     <td>
                         <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Xoá</button>
+                            <input type='submit' class='btn btn-sm btn-danger' value='Xóa'>
                         </form>
                     </td>
                 </tr>

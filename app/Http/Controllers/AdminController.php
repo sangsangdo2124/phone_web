@@ -124,4 +124,62 @@ class AdminController extends Controller
     
             return response()->json($chartData);
         }
+        public function listOrders()
+        {
+            $orders = DB::table('don_hang')
+            ->select(
+                'don_hang.ma_don_hang',
+                'don_hang.ngay_dat_hang',
+                'don_hang.tinh_trang',
+                DB::raw("CASE WHEN don_hang.tinh_trang = 1 THEN 'Đang vận chuyển' ELSE 'Đã giao' END as trang_thai"),
+                'don_hang.ten_KH',
+                'don_hang.sdt_KH',
+                'don_hang.dia_chi_KH',
+            )
+            ->orderByDesc('don_hang.ngay_dat_hang')
+            ->get();
+            return view('admin.orders', compact('orders'));
+        }
+        public function delete($id)
+        {
+            DB::table('don_hang')->where('ma_don_hang', $id)->delete();
+            return redirect()->route('orders.list')->with('success', 'Đơn hàng đã được xóa thành công!');
+        }
+        public function updateOrderStatus($id)
+        {
+            DB::table('don_hang')
+                ->where('ma_don_hang', $id)
+                ->update(['tinh_trang' => 0]); // chuyển về "đã giao"
+        
+            return redirect()->route('orders.list')->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+        }
+        
+        public function orderDetail($id)
+        {
+            $order = DB::table('don_hang')
+                ->join('users', 'don_hang.user_id', '=', 'users.id')
+                ->where('don_hang.ma_don_hang', $id)
+                ->select(
+                    'don_hang.*',
+                    'users.name as ten_khach_hang',
+                    'users.phone',
+                    'users.dia_chi'
+                )
+                ->first();
+
+            $orderDetails = DB::table('chi_tiet_don_hang')
+                ->join('san_pham', 'chi_tiet_don_hang.product_id', '=', 'san_pham.id')
+                ->where('chi_tiet_don_hang.ma_don_hang', $id)
+                ->select(
+                    'san_pham.ten_san_pham',
+                    'san_pham.gia_ban',
+                    'chi_tiet_don_hang.so_luong'
+                )
+                ->get();
+
+            return view('admin.order_detail', compact('order', 'orderDetails'));
+        }
+
+
+    
 }

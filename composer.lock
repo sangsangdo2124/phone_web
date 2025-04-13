@@ -2071,6 +2071,23 @@
         },
         {
             "name": "nette/utils",
+
+          
+         /*MY_LE
+            "version": "v4.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nette/utils.git",
+                "reference": "ce708655043c7050eb050df361c5e313cf708309"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nette/utils/zipball/ce708655043c7050eb050df361c5e313cf708309",
+                "reference": "ce708655043c7050eb050df361c5e313cf708309",
+                
+                */
+      
+      
             "version": "v3.2.10",
             "source": {
                 "type": "git",
@@ -2151,9 +2168,20 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/utils/issues",
+
+              
+              /*MY_LE
+                "source": "https://github.com/nette/utils/tree/v4.0.6"
+            },
+            "time": "2025-03-30T21:06:30+00:00"
+        */
+          
+          
+          
                 "source": "https://github.com/nette/utils/tree/v3.2.10"
             },
             "time": "2023-07-30T15:38:18+00:00"
+      
         },
         {
             "name": "nikic/php-parser",

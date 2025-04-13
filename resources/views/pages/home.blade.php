@@ -106,10 +106,18 @@
 																<i class="fa fa-star{{ $i <= $product->rating ? '' : '-o' }}"></i>
 															@endfor
 														</div>
+														
 														<div class="product-btns">
-															<button class="add-to-wishlist"><i class="fa fa-heart-o"></i></button>
+
+															<form method="POST" action="{{ route('wishlistadd') }}" style="display:inline">
+																@csrf
+																<input type="hidden" name="id" value="{{ $product->id }}">
+																<button class="add-to-wishlist" type="submit"><i class="fa fa-heart-o"></i></button>
+															</form>
+					
 															<button class="quick-view" data-id="{{ $product->id }}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 															<div id="quick-view-container"></div>
+
 
 														</div>
 													</div>

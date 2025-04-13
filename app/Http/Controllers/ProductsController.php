@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+
 class ProductsController extends Controller
 {
 
@@ -319,6 +320,37 @@ class ProductsController extends Controller
         return redirect()->route('products.index')->with('success', 'Xoá thành công!');
     }
 
+//footer
+    public function chitiet($id)
+    {
+        $data = Product::where('id', $id)->first();
+
+        //$data = collect([$sanpham]); // hoặc [$sanpham] nếu không cần Collection
+        return view('pages.chitiet', compact('data'));
+    }
+
+    function lichsuht()
+    {
+        return view("pages.lichsuht", ['title' => 'Lịch sử hình thành']);
+    }
+
+    function thuonghieu()
+    {
+        return view("pages.thuonghieu", ['title' => 'Thương hiệu']);
+    }
+
+    function csdoitra_baohanh()
+    {
+        return view("pages.csdoitra_baohanh",  ['title' => 'Chính sách đổi trả - bảo hành']);
+    }
+
+    function tuvan()
+    {
+        return view("pages.tuvan", ['title' => 'Tư vấn']);
+    }
+
+  
+  //admin
     public function index()
     {
         $products = Product::all();

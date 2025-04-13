@@ -48,6 +48,9 @@ class StoreController extends Controller
 }    
 //menu tim kiem
 
+
+
+
 /*master
         $categoryId = $request->query('category'); // Lấy ?category= từ URL, Lọc theo danh mục
         $brandId = $request->query('brand');       // Lọc theo thương hiệu
@@ -92,7 +95,7 @@ class StoreController extends Controller
         $brands = DB::table('nha_san_xuat')->get();
 
         return view('pages.allproducts', compact('categories', 'brands', 'products'));
-    }*/
+    }
 
 
 

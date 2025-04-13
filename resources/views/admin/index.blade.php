@@ -4,6 +4,7 @@
 
 @if (session('success'))
     <div style="color: green;">{{ session('success') }}</div>
+@endif
 
 @if (session('status'))
 <div class="alert alert-success">

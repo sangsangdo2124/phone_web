@@ -18,7 +18,7 @@
 @endif
 <form action="{{ route('productsave', ['action' => $action]) }}" method="POST" enctype="multipart/form-data">
     @csrf
-    <!-- <table border="1" width="50%" style="border-collapse: collapse;">
+    <table border="1" width="50%" style="border-collapse: collapse;">
         <tr>
             <td>Mã sản phẩm</td>
             <td><input type="text" name="id"></td>
@@ -66,7 +66,7 @@
         <tr>
             <td colspan="2"><input type="submit" name="themsanpham" value="Thêm sản phẩm"></td>
         </tr>
-    </table> -->
+    </table>
 
     @if($action == "add")
         <div style='text-align:center;font-weight:bold;color:#15c;'>THÊM SẢN PHẨM</div>

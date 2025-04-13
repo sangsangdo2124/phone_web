@@ -47,7 +47,7 @@ Route::post('/order/create','App\Http\Controllers\ProductsController@ordercreate
 
 // Định nghĩa route cho trang quản lý
 Route::get('/redirect/products','App\Http\Controllers\AdminController@listproducts')->name('listproducts');
-<<<<<<< HEAD
+
 Route::get('/redirect/products/insert','App\Http\Controllers\AdminController@insert')->name('products.insert');
 // Hiển thị form sửa
 Route::get('admin/products/{id}/edit', 'App\Http\Controllers\ProductsController@edit')->name('products.edit');
@@ -58,9 +58,6 @@ Route::put('admin/products/{id}', 'App\Http\Controllers\ProductsController@updat
 // Xử lý xoá sản phẩm
 Route::delete('admin/products/{id}', 'App\Http\Controllers\ProductsController@destroy')->name('products.destroy');
 Route::get('admin/products', 'App\Http\Controllers\ProductsController@index')->name('products.index');
-
-
-=======
 
 Route::get('/product/insert', [AdminController::class, 'productinsert'])->name('productinsert');
 
@@ -78,4 +75,3 @@ Route::get('/orders/{id}/detail', [AdminController::class, 'orderDetail'])->name
     Route::get('/customers', [AdminController::class, 'listCustomers'])->name('customers');
 
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
->>>>>>> a41143562ace7ad993c67f8e10e3586aaaf98624

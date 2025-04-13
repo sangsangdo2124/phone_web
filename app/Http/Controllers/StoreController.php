@@ -1,8 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\LoaiSanPham;
+use App\Models\NhaSanXuat;
 
 class StoreController extends Controller
 {
@@ -14,6 +18,37 @@ class StoreController extends Controller
 
     public function index(Request $request)
     {
+//menu_tim_kiem
+        $categoryFilter = $request->query('category');
+        $brandFilter = $request->query('brand');
+        $searchTerm = $request->query('search');
+    
+        $categories = DB::table('phan_loai')->get();
+        $brands = DB::table('nha_san_xuat')->get();
+    
+        $query = DB::table('san_pham');
+    
+        if ($categoryFilter) {
+            $query->where('id_phan_loai', $categoryFilter);
+        }
+    
+        if ($brandFilter) {
+            $query->where('id_hang_sx', $brandFilter);
+        }
+    
+        if ($searchTerm) {
+            $query->where('ten_san_pham', 'LIKE', '%' . $searchTerm . '%');
+        }
+    
+        $products = $query->paginate(9)->appends($request->query()); // giữ lại query khi phân trang
+    
+        return view('pages.allproducts', compact('products', 'categories', 'brands'));
+    }
+    
+}    
+//menu tim kiem
+
+/*master
         $categoryId = $request->query('category'); // Lấy ?category= từ URL, Lọc theo danh mục
         $brandId = $request->query('brand');       // Lọc theo thương hiệu
 
@@ -62,3 +97,4 @@ class StoreController extends Controller
 
 
 }
+master*/

@@ -33,8 +33,9 @@ class HomeController extends Controller
            
         }
     }
+    
     // Hiển thị sản phẩm mới nhất
-    public function index()
+    public function new()
     {
         // Lấy sản phẩm mới nhất
         $collections = PhanLoai::all();

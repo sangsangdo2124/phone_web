@@ -46,7 +46,7 @@ class StoreController extends Controller
     
 }    
   
-  /*
+  /* sang sang
         $categoryId = $request->query('category'); // Lấy ?category= từ URL, Lọc theo danh mục
         $brandId = $request->query('brand');       // Lọc theo thương hiệu
 

@@ -64,7 +64,7 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $data->id }}">
                                     <input type="hidden" name="so_luong" id="muangay-quantity">
-                                    <button type="submit" class="add-to-cart-btn">
+                                    <button type="submit" class="add-to-cart-btn add-product">
                                         <i class="fa fa-bolt"></i> Mua ngay
                                     </button>
                                 </form>

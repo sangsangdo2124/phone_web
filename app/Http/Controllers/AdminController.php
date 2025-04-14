@@ -68,12 +68,11 @@ class AdminController extends Controller
             return redirect()->route('listproducts')->with('status', $message);
         }
 
-
         public function layDuLieuThongKe(Request $request)
         {
             $thoigian = $request->input('thoigian', '');
-            $now = Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
-    
+            $now = Carbon::now('Asia/Ho_Chi_Minh')->endOfDay()->toDateTimeString();
+        
             switch ($thoigian) {
                 case '7ngay':
                     $subdays = Carbon::now('Asia/Ho_Chi_Minh')->subDays(7)->toDateString();
@@ -89,58 +88,52 @@ class AdminController extends Controller
                     $subdays = Carbon::now('Asia/Ho_Chi_Minh')->subDays(365)->toDateString();
                     break;
             }
-            // Lấy danh sách đơn hàng đã xử lý trong khoảng thời gian
+        
+            // Xóa dữ liệu thống kê cũ trong khoảng thời gian được chọn
+            ThongKe::whereBetween('ngaydat', [$subdays, $now])->delete();
+        
+            // Lấy tất cả đơn hàng đã xử lý trong khoảng thời gian
             $orders = DB::table('don_hang')
                 ->where('tinh_trang', 1)
                 ->whereBetween('ngay_dat_hang', [$subdays, $now])
-                ->select('ma_don_hang', DB::raw('DATE(ngay_dat_hang) as ngaydat'))
                 ->get();
-    
+        
+            $thongKeData = [];
+        
             foreach ($orders as $order) {
-                $orderId = $order->ma_don_hang;
-                $ngaydat = $order->ngaydat;
-    
-                // Nếu chưa thống kê đơn này
-                if (!OrderId::where('order_id', $orderId)->exists()) {
-                    // Tính tổng doanh thu của đơn đó
-                    $doanhthu = DB::table('chi_tiet_don_hang')
-                        ->where('ma_don_hang', $orderId)
-                        ->select(DB::raw('SUM(so_luong * don_gia) as tong'))
-                        ->value('tong');
-    
-                    $thongke = ThongKe::firstOrNew(['ngaydat' => $ngaydat]);
-                    $thongke->donhang = ($thongke->donhang ?? 0) + 1;
-                    $thongke->doanhthu = ($thongke->doanhthu ?? 0) + $doanhthu;
-                    $thongke->save();
-    
-                    OrderId::create(['order_id' => $orderId]);
+                $orderDate = Carbon::parse($order->ngay_dat_hang)->toDateString();
+        
+                $tongDoanhThu = DB::table('chi_tiet_don_hang')
+                    ->where('ma_don_hang', $order->ma_don_hang)
+                    ->select(DB::raw('SUM(so_luong * don_gia) as tong'))
+                    ->value('tong') ?? 0;
+        
+                if (!isset($thongKeData[$orderDate])) {
+                    $thongKeData[$orderDate] = [
+                        'ngaydat' => $orderDate,
+                        'donhang' => 1,
+                        'doanhthu' => $tongDoanhThu,
+                    ];
+                } else {
+                    $thongKeData[$orderDate]['donhang'] += 1;
+                    $thongKeData[$orderDate]['doanhthu'] += $tongDoanhThu;
                 }
             }
-    
-            // Trả dữ liệu về biểu đồ
+        
+            // Lưu thống kê mới vào bảng thong_ke
+            foreach ($thongKeData as $item) {
+                ThongKe::create($item);
+            }
+        
+            // Trả dữ liệu về cho biểu đồ
             $chartData = ThongKe::whereBetween('ngaydat', [$subdays, $now])
                 ->orderBy('ngaydat')
                 ->get(['ngaydat as date', 'donhang as order', 'doanhthu as sales']);
-    
+        
             return response()->json($chartData);
         }
-        public function listOrders()
-        {
-            $orders = DB::table('don_hang')
-            ->select(
-                'don_hang.ma_don_hang',
-                'don_hang.ngay_dat_hang',
-                'don_hang.tinh_trang',
-                DB::raw("CASE WHEN don_hang.tinh_trang = 1 THEN 'Đang vận chuyển' ELSE 'Đã giao' END as trang_thai"),
-                'don_hang.ten_KH',
-                'don_hang.sdt_KH',
-                'don_hang.dia_chi_KH',
-            )
-            ->orderByDesc('don_hang.ngay_dat_hang')
-            ->get();
-            return view('admin.orders', compact('orders'));
-        }
-        public function delete($id)
+        
+         public function delete($id)
         {
             DB::table('don_hang')->where('ma_don_hang', $id)->delete();
             return redirect()->route('orders.list')->with('success', 'Đơn hàng đã được xóa thành công!');

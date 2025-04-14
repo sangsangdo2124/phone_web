@@ -12,9 +12,7 @@
 					<div class="col-md-12">
 						<ul class="breadcrumb-tree">
 							<li><a href="{{ url('/') }}">Home</a></li>
-							<li><a href="#">All Categories</a></li>
-							<li><a href="#">Accessories</a></li>
-							<li><a href="#">Headphones</a></li>
+							<li><a href="#">Chi tiết sản phẩm</a></li>
 							<li class="active"><a href="{{route('products', ['id' => $data->id])}}"></a></li>
 						</ul>
 					</div>
@@ -120,8 +118,14 @@
                     beforeSend: function () {
                     },
                     success: function (data) {
-                        $("#cart-number-product").html(data);
-                    },
+						$("#cart-number-product").html(data);
+						Swal.fire({
+							icon: 'success',
+							title: 'Đã thêm vào giỏ hàng!',
+							showConfirmButton: false,
+							timer: 1000
+						});
+					},
                     error: function (xhr, status, error) {
                     },
                     complete: function (xhr, status) {

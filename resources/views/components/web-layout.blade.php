@@ -105,15 +105,11 @@
 					<!-- SEARCH BAR -->
 					<div class="col-md-6">
 						<div class="header-search">
-							<form>
-								<select class="input-select">
-									<option value="0">All Categories</option>
-									<option value="1">Category 01</option>
-									<option value="2">Category 02</option>
-								</select>
-								<input class="input" placeholder="Bạn cần tìm gì?">
-								<button class="search-btn">Tìm kiếm</button>
-							</form>
+						<form action="{{ route('pages.allproducts') }}" method="GET">
+    						<input class="input" type="text" name="search" placeholder="Bạn cần tìm gì?" value="{{ request('search') }}">
+    						<button type="submit" class="search-btn">Tìm kiếm</button>
+						</form>
+
 						</div>
 					</div>
 					<!-- /SEARCH BAR -->
@@ -169,20 +165,44 @@
 	</header>
 	<!-- /HEADER -->
 
-	<!-- NAVIGATION -->
+<!-- NAVIGATION -->
 	<nav id="navigation">
 		<!-- container -->
 		<div class="container">
 			<!-- responsive-nav -->
 			<div id="responsive-nav">
-				<!-- NAV -->
+				
+        <!-- NAV -->
 				<ul class="main-nav nav navbar-nav">
-					<li class="active"><a href="/">Trang chủ</a></li>
-					<li><a href="#">Sản phẩm</a></li>
-					<li><a href="#">Thương hiệu</a></li>
-					<li><a href="#">Phụ kiện công nghệ</a></li>
+					<li class="active"><a href="{{ url('/') }}">Trang chủ</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Sản phẩm <i class="fa fa-caret-down"></i></a>
+						<ul class="dropdown-menu">
+							@foreach($categories as $category)
+								<li>
+									<a href="{{ route('pages.allproducts', ['category' => $category->id]) }}">
+										{{ $category->ten_loai_san_pham }}
+									</a>
+                				</li>
+            				@endforeach
+        				</ul>
+    				</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Thương hiệu <i class="fa fa-caret-down"></i></a>
+						<ul class="dropdown-menu">
+							@foreach($brands as $brand)
+								<li>
+									<a href="{{ route('pages.allproducts', ['brand' => $brand->id]) }}">
+										{{ $brand->ten_nha_san_xuat }}
+									</a>
+								</li>
+							@endforeach
+						</ul>
+					</li>
+					<li><a href="{{ url('/') }}#new-products">Sản phẩm mới nhất</a></li>
 				</ul>
 				<!-- /NAV -->
+
 			</div>
 			<!-- /responsive-nav -->
 		</div>
@@ -334,50 +354,3 @@
 	<script src="{{ asset('js/jquery.zoom.min.js') }}"></script>
 	<script src="{{ asset('js/main.js') }}"></script>
 	<!---->
-
-
-
-	<script type="text/javascript">
-		$(document).ready(function () {
-			// Kích hoạt dropdown khi nhấp vào
-			$('.dropdown-toggle').dropdown();
-		});
-	</script>
-	<style>
-		/* Tùy chỉnh dropdown đăng nhập*/
-		.dropdown-menu {
-			background-color: #333;
-			border: 2px solid #D10024 border-radius: 5px;
-			padding: 10px 0;
-			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-		}
-
-		/* Màu chữ và hover của item trong dropdown */
-		.dropdown-menu li a {
-			color: white;
-			padding: 10px 20px;
-			font-size: 16px;
-		}
-
-		.dropdown-menu li a:hover {
-			background-color: #ff666f;
-			color: white;
-		}
-
-		/* Kích thước của dropdown */
-		.dropdown-toggle {
-			font-size: 18px;
-		}
-
-		/* Thêm hiệu ứng cho dropdown */
-		.dropdown-menu {
-			transition: all 0.3s ease-in-out;
-			opacity: 0;
-			visibility: hidden;
-		}
-
-		.dropdown:hover .dropdown-menu {
-			opacity: 1;
-			visibility: visible;
-		}
-	</style>

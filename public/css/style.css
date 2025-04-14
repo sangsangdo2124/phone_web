@@ -45,6 +45,112 @@ Table OF Contents
 12 > RESPONSIVE
 */
 
+/* ======== Common Modal Base ======== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* ======== QUICK VIEW MODAL ======== */
+#quick-view-modal {
+  z-index: 10000;
+}
+
+.quick-view-modal .modal-content {
+  background: #fff;
+  margin: 5% auto;
+  padding: 30px;
+  width: 80%;
+  max-width: 900px;
+  border-radius: 10px;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.quick-view-modal .modal-content img {
+  max-width: 100%;
+  height: 300px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.quick-view-modal .product-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.quick-view-modal .product-img {
+  flex: 1 1 300px;
+  object-fit: contain;
+}
+
+.quick-view-modal .product-info {
+  flex: 1 1 300px;
+}
+
+/* ======== LOGIN MODAL ======== */
+#loginRequiredModal {
+  z-index: 10001;
+}
+
+.login-modal .modal-content {
+  border: 2px solid #D10024;
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+.login-modal .modal-header {
+  background-color: #D10024;
+  color: #fff;
+  border-bottom: none;
+}
+
+.login-modal .modal-header .close {
+  color: #fff;
+}
+
+.login-modal .modal-footer {
+  justify-content: center;
+}
+
+.login-modal .login-btn {
+  background-color: #D10024;
+  border: none;
+}
+
+.login-modal .register-btn {
+  border: 1px solid #D10024;
+  color: #D10024;
+  background: #fff;
+}
+
+/* ======== Common ======== */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #888;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #000;
+}
+
+
 body {
     font-family: 'Inter';
     font-weight: 400;
@@ -652,7 +758,44 @@ body {
   .header-ctn li.nav-toggle {
     display: none;
   }
-  
+	/* Tùy chỉnh dropdown*/
+  .dropdown-menu {
+    background-color: #333;
+    border: 2px solid #D10024;
+    border-radius: 5px;
+    padding: 10px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Màu chữ và hover của item trong dropdown */
+  .dropdown-menu li a {
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  .dropdown-menu li a:hover {
+    background-color: #ff666f;
+    color: white;
+  }
+
+  /* Kích thước của dropdown */
+  .dropdown-toggle {
+    font-size: 15px;
+  }
+
+  /* Thêm hiệu ứng cho dropdown */
+  .dropdown-menu {
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+  }
+
   /*----------------------------*\
       responsive nav
   \*----------------------------*/
@@ -1017,7 +1160,7 @@ body {
     left: 1px;
     right: 1px;
     bottom: 1px;
-    padding: 15px;
+    padding: 10px;
     background: #1e1f29;
     text-align: center;
     -webkit-transform: translateY(0%);
@@ -1037,13 +1180,13 @@ body {
   .product .add-to-cart .add-to-cart-btn {
     position: relative;
     border: 2px solid transparent;
-    height: 40px;
-    padding: 0 30px;
+    height: 30px;
+    padding: 0 20px;
     background-color: #ef233c;
     color: #FFF;
     text-transform: uppercase;
-    font-weight: 700;
-    border-radius: 40px;
+    font-weight: 500;
+    border-radius: 30px;
     -webkit-transition: 0.2s all;
     transition: 0.2s all;
   }
@@ -1053,8 +1196,8 @@ body {
     left: 0;
     top: 0;
     width: 40px;
-    height: 40px;
-    line-height: 38px;
+    height: 15px;
+    line-height: 30px;
     color: #D10024;
     opacity: 0;
     visibility: hidden;
@@ -1530,6 +1673,7 @@ body {
     margin-top: 20px;
   }
   
+
   .product-details .add-to-cart .add-to-cart-btn {
     position: relative;
     border: 2px solid transparent;
@@ -1574,7 +1718,7 @@ body {
     font-size: 12px;
     text-transform: uppercase;
     margin-right: 15px;
-    margin-bottom: 0px;
+    margin-bottom: 15px;
   }
   
   .product-details .add-to-cart .qty-label .input-number {

@@ -329,6 +329,36 @@ class ProductsController extends Controller
     {
         $products = Product::all();
         return view('admin.index', compact('products'));
+    
+    }   
+    
+    public function chitiet($id)
+    {
+        $data = Product::where('id', $id)->first();
+
+        //$data = collect([$sanpham]); // hoặc [$sanpham] nếu không cần Collection
+        return view('pages.chitiet', compact('data'));
+    }
+
+    function lichsuht()
+    {
+        return view("pages.lichsuht", ['title' => 'Lịch sử hình thành']);
+    }
+
+    function thuonghieu()
+    {
+        return view("pages.thuonghieu", ['title' => 'Thương hiệu']);
+    }
+
+
+    function csdoitra_baohanh()
+    {
+        return view("pages.csdoitra_baohanh",  ['title' => 'Chính sách đổi trả - bảo hành']);
+    }
+
+    function tuvan()
+    {
+        return view("pages.tuvan", ['title' => 'Tư vấn']);
     }
 
      //Hàm để hiển thị Quick View

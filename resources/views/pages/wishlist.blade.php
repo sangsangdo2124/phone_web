@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <ul class="breadcrumb-tree">
-                        <li><a href="{{ route('index') }}">Home</a></li>
+                        <li><a href="{{ url('/') }}">Home</a></li>
                         <li class="active">Yêu thích</li>
                     </ul>
                 </div>
@@ -51,7 +51,7 @@
                         <td>1</td>
                         <td>{{ number_format($product->gia_ban, 0, ',', '.') }}đ</td>
                         <td>
-                            <a href="{{ route('chitiet', ['id' => $product->id]) }}" class="btn btn-sm btn-info">Chi tiết</a>
+                            <a href="{{ route('products', ['id' => $product->id]) }}" class="btn btn-sm btn-info">Chi tiết</a>
                         </td>
                         <td>
                             <form method="POST" action="{{ route('wishlistdelete') }}">

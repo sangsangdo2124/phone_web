@@ -25,12 +25,15 @@
                                     ${{ number_format($product->gia_ban, 2) }}
                                 </h4>
                                 <div class="product-btns">
-                                    <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-                                    <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+                                    <form method="POST" action="{{ route('wishlistadd') }}" style="display:inline">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $product->id }}">
+                                        <button class="add-to-wishlist" type="submit"><i class="fa fa-heart-o"></i><span class="tooltipp"></button>
+                                    </form>
                                     
                                     <!-- Quick View Button -->
                                     <!-- Nút Quick View -->
-                                    <button class="quick-view" data-id="{{ $product->id }}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+                                    <button class="quick-view" data-id="{{ $product->id }}"><i class="fa fa-eye"></i><span class="tooltipp">Xem nhanh</span></button>
                                     <div id="quick-view-container"></div>
                                 </div>
                             </div>

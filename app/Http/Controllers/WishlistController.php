@@ -26,38 +26,41 @@
         // Thêm sản phẩm vào danh sách yêu thích
         public function store(Request $request)
         {
-            WishlistItem::create([
-                'user_id' => auth()->id(), // hoặc 1 nếu đang test
-                'san_pham_id' => $request->id
-            ]);
 
-            return redirect()->route('wishlist'); 
+            $userId = auth()->id();
+            $productId = $request->id;
+
+            // Kiểm tra nếu đã tồn tại thì không thêm nữa
+            $exists = WishlistItem::where('user_id', $userId)
+                ->where('san_pham_id', $productId)
+                ->exists();
+
+            if (!$exists) {
+                WishlistItem::create([
+                    'user_id' => $userId,
+                    'san_pham_id' => $productId
+                ]);
+            }
+
+            return redirect()->route('wishlist')->with('success', 'Đã thêm vào danh sách yêu thích!');
         }
 
 
-        /*public function add(Request $request)
-        {
-            $id = $request->input('id');
-            $wishlist = Session::get('wishlist', []);
-
-            if (!in_array($id, $wishlist)) {
-                $wishlist[] = $id;
-                Session::put('wishlist', $wishlist);
-            }
-
-            return redirect()->back()->with('success', 'Đã thêm vào yêu thích');
-        }*/
+        
 
         // Xóa sản phẩm khỏi danh sách yêu thích
         public function delete(Request $request)
         {
+
+            $userId = auth()->id();
+            $productId = $request->id;
+
             $id = $request->input('id');
             $wishlist = Session::get('wishlist', []);
 
-            if (($key = array_search($id, $wishlist)) !== false) {
-                unset($wishlist[$key]);
-                Session::put('wishlist', $wishlist);
-            }
+            WishlistItem::where('user_id', $userId)
+            ->where('san_pham_id', $productId)
+            ->delete();
 
             return redirect()->back()->with('success', 'Đã xóa khỏi yêu thích');
         }

@@ -32,6 +32,10 @@
 	<!-- Custom CSS stlylesheet -->
 	<link type="text/css" rel="stylesheet" href="{{ asset('css/style.css') }}">
 
+	<!-- Thêm thư viện sweetalert -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 </head>
 
 <body>
@@ -122,7 +126,16 @@
 								<a href="{{ route('wishlist') }}">
 									<i class="fa fa-heart-o"></i>
 									<span>Yêu thích</span>
-									<div class="qty">0<!--code để lấy số lượng--></div>
+									<div class="qty" id='whishlist-number-product'>
+										@php $wishlistCount = 0;
+											if (Auth::check()) {
+												$wishlistCount = DB::table('wishlist_items')->where('user_id', Auth::id())->count();
+											} elseif (session()->has('wishlist')) {
+												$wishlistCount = count(session('wishlist'));
+											}
+										@endphp
+										<span id="wishlist-count">{{ $wishlistCount }}</span>
+									</div>
 								</a>
 							</div>
 							<!-- /Danh sách yêu thích -->
@@ -404,6 +417,12 @@
 					},
 					success: function (data) {
 						$("#cart-number-product").html(data);
+						Swal.fire({
+							icon: 'success',
+							title: 'Đã thêm vào giỏ hàng!',
+							showConfirmButton: false,
+							timer: 1000
+						});
 					},
 					error: function (xhr, status, error) {
 					},

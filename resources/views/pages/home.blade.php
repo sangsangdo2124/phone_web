@@ -110,11 +110,9 @@
 															<form method="POST" action="{{ route('wishlistadd') }}" style="display:inline">
 																@csrf
 																<input type="hidden" name="id" value="{{ $product->id }}">
-																<button class="add-to-wishlist" type="submit"><i class="fa fa-heart-o"></i></button>
+																<button class="add-to-wishlist" type="submit"><i class="fa fa-heart-o"></i><span class="tooltipp"></span></button>
 															</form>
-				
-															<button class="add-to-wishlist"><i class="fa fa-heart-o"></i></button>
-															<button class="quick-view" data-id="{{ $product->id }}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+															<button class="quick-view" data-id="{{ $product->id }}"><i class="fa fa-eye"></i><span class="tooltipp">Xem nhanh</span></button>
 															<div id="quick-view-container"></div>
 
 														</div>

@@ -65,7 +65,7 @@
 								<i class="fa fa-user-o"></i> {{ Auth::user()->name }}
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="#">Lịch sử mua hàng</a></li>
+								<li><a href="{{ route('accountpanel') }}">Tài khoản</a></li>
 								<li>
 									<form method="POST" action="{{ route('logout') }}">
 										@csrf
@@ -95,7 +95,7 @@
 					<!-- LOGO -->
 					<div class="col-md-3">
 						<div class="header-logo">
-							<a href="#" class="logo">
+							<a href="{{ url('/') }}" class="logo">
 								<img src="{{ asset('img/logo.png') }}" alt="Logo">
 							</a>
 						</div>
@@ -128,18 +128,21 @@
 							<!-- /Danh sách yêu thích -->
 							
 							<!-- Cart -->
-							
 
-							<div class="dropdown" >
+
+							<div class="dropdown">
 								<a href="{{ route('order') }}">
 									<i class="fa fa-shopping-cart"></i>
 									<span>Giỏ hàng</span>
 									<div class="qty" id='cart-number-product'>
-										@if (session('cart'))
-											{{ count(session('cart')) }}
-										@else
-											0
-										@endif
+										@php $cartCount = 0;
+											if (Auth::check()) {
+												$cartCount = DB::table('cart_items')->where('user_id', Auth::id())->count();
+											} elseif (session()->has('cart')) {
+												$cartCount = count(session('cart'));
+											}
+										@endphp
+										<span id="cart-count">{{ $cartCount }}</span>
 									</div>
 								</a>
 							</div>
@@ -218,7 +221,7 @@
 		{{$slot}}
 	</div>
 	<!-- /SECTION -->
-
+	
 	<!-- NEWSLETTER -->
 	<div id="newsletter" class="section">
 		<!-- container -->
@@ -354,3 +357,109 @@
 	<script src="{{ asset('js/jquery.zoom.min.js') }}"></script>
 	<script src="{{ asset('js/main.js') }}"></script>
 	<!---->
+	<!-- /SECTION -->
+
+	<div class="modal fade" id="loginRequiredModal" tabindex="-1" role="dialog" data-backdrop="static"
+        data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content" style="border: 2px solid #D10024;">
+                <div class="modal-header" style="background-color: #D10024; color: #fff;">
+                    <button type="button" class="close" data-dismiss="modal" style="color: #fff;">&times;</button>
+                    <h4 class="modal-title" style="color: #fff; text-align: center;">Yêu cầu đăng nhập</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Vui lòng đăng nhập tài khoản để xem ưu đãi và thanh toán dễ dàng hơn.</p>
+                </div>
+                <div class="modal-footer text-center" style="justify-content: center;">
+                    <a href="{{ route('login') }}" class="btn btn-danger"
+                        style="background-color: #D10024; border: none;">Đăng nhập</a>
+                    <a href="{{ route('register') }}" class="btn btn-outline"
+                        style="border: 1px solid #D10024; color: #D10024; background: #fff;">Đăng ký</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<script>
+		var isLoggedIn = {{ Auth::check() ? 'true' : 'false' }}; // true/false
+
+		$(document).ready(function () {
+			$(".add-product").click(function (e) {
+				if (!isLoggedIn) {
+					$('#loginRequiredModal').modal('show');
+					e.preventDefault(); // Ngăn không cho tiếp tục
+					return;
+				}
+
+				// Nếu có logic thêm vào giỏ hàng bằng AJAX, bạn xử lý ở đây
+				let id = $(this).attr('sp_id');
+				let num = 1; // Mặc định số lượng là 1 hoặc có thể cho người dùng chọn
+
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					url: "{{route('cartadd')}}",
+					data: { "_token": "{{ csrf_token() }}", "id": id, "num": num },
+					beforeSend: function () {
+					},
+					success: function (data) {
+						$("#cart-number-product").html(data);
+					},
+					error: function (xhr, status, error) {
+					},
+					complete: function (xhr, status) {
+					}
+				});
+			});
+		});
+	</script>
+
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			// Kích hoạt dropdown khi nhấp vào
+			$('.dropdown-toggle').dropdown();
+		});
+	</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const hash = window.location.hash;
+        if (hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                setTimeout(() => {
+                    target.scrollIntoView({ behavior: "smooth" });
+                }, 100); // Delay để chắc chắn phần tử đã render
+            }
+        }
+    });
+</script>
+<script>
+$(document).ready(function() {
+    // Khi người dùng nhấn nút "Quick View"
+    $('.quick-view').on('click', function() {
+        var productId = $(this).data('id'); // Lấy id sản phẩm
+
+        // Gửi AJAX request để lấy thông tin sản phẩm
+        $.ajax({
+            url: '/quick-view/' + productId, // Địa chỉ API để lấy dữ liệu sản phẩm
+            method: 'GET',
+            success: function(response) {
+                // Hiển thị thông tin sản phẩm vào modal
+                $('#quick-view-content').html(response);
+                $('#quick-view-modal').show(); // Hiển thị modal
+            },
+            error: function() {
+                alert('Không thể tải thông tin sản phẩm.');
+            }
+        });
+    });
+
+    // Đóng modal khi nhấn vào dấu "X"
+    $('.close').on('click', function() {
+        $('#quick-view-modal').hide();
+    });
+});
+</script>
+<x-quick-view-modal/>

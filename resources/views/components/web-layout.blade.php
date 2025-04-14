@@ -32,6 +32,10 @@
 	<!-- Custom CSS stlylesheet -->
 	<link type="text/css" rel="stylesheet" href="{{ asset('css/style.css') }}">
 
+	<!-- Thêm thư viện sweetalert -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 </head>
 
 <body>
@@ -119,14 +123,23 @@
 						<div class="header-ctn">
 							<!--Danh sách yêu thích -->
 							<div>
-								<a href="#">
+								<a href="{{ route('wishlist') }}">
 									<i class="fa fa-heart-o"></i>
 									<span>Yêu thích</span>
-									<div class="qty">0<!--code để lấy số lượng--></div>
+									<div class="qty" id='whishlist-number-product'>
+										@php $wishlistCount = 0;
+											if (Auth::check()) {
+												$wishlistCount = DB::table('wishlist_items')->where('user_id', Auth::id())->count();
+											} elseif (session()->has('wishlist')) {
+												$wishlistCount = count(session('wishlist'));
+											}
+										@endphp
+										<span id="wishlist-count">{{ $wishlistCount }}</span>
+									</div>
 								</a>
 							</div>
 							<!-- /Danh sách yêu thích -->
-
+							
 							<!-- Cart -->
 
 
@@ -168,7 +181,7 @@
 	</header>
 	<!-- /HEADER -->
 
-	<!-- NAVIGATION -->
+<!-- NAVIGATION -->
 	<nav id="navigation">
 		<!-- container -->
 		<div class="container">
@@ -294,9 +307,9 @@
 						<div class="footer">
 							<h3 class="footer-title">Về chúng tôi</h3>
 							<ul class="footer-links">
-								<li><a href="#">Giới thiệu </a></li>
-								<li><a href="#">Chính sách</a></li>
-								<li><a href="#">Lịch sử hình thành</a></li>
+								<li><a href="{{ route('thuonghieu') }}">Giới thiệu </a></li>
+								<li><a href="{{ route('csdoitra_baohanh') }}">Chính sách</a></li>
+								<li><a href="{{ route('lichsuht') }}">Lịch sử hình thành</a></li>
 							</ul>
 						</div>
 					</div>
@@ -308,7 +321,7 @@
 								<li><a href="#">Tài khoản</a></li>
 								<li><a href="{{ route('order') }}">Giỏ hàng </a></li>
 								<li><a href="#">Danh sách yêu thích</a></li>
-								<li><a href="#">Tư vấn</a></li>
+								<li><a href="{{ route('tuvan') }}">Tư vấn</a></li>
 							</ul>
 						</div>
 					</div>
@@ -404,6 +417,12 @@
 					},
 					success: function (data) {
 						$("#cart-number-product").html(data);
+						Swal.fire({
+							icon: 'success',
+							title: 'Đã thêm vào giỏ hàng!',
+							showConfirmButton: false,
+							timer: 1000
+						});
 					},
 					error: function (xhr, status, error) {
 					},

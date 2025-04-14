@@ -82,6 +82,12 @@ class ProductsController extends Controller
     public function order()
     {
 
+        // Nếu người dùng quay lại từ "mua ngay", ta sẽ bỏ session muangay
+        if (session()->has('muangay')) {
+            session()->forget('muangay');
+        }
+
+
         $data = [];
         $quantity = [];
 

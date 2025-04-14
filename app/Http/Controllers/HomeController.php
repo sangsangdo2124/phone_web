@@ -29,7 +29,7 @@ class HomeController extends Controller
         }
         else 
         {
-            return $this->index();
+            return $this->new();
            
         }
     }

@@ -101,7 +101,24 @@ Route::get('/san-pham', [CategoryController::class, 'filterByLoai']);
 
 // Định nghĩa route cho trang quản lý
 Route::get('/redirect/products','App\Http\Controllers\AdminController@listproducts')->name('listproducts');
-Route::get('/redirect/products/insert','App\Http\Controllers\AdminController@insert')->name('products.insert');
+
+Route::get('/product/insert', [AdminController::class, 'productinsert'])->name('productinsert');
+
+Route::post('/product/save/{action}', [AdminController::class, 'productSave'])->name('productsave');
+
+Route::post('/load-thongke', [AdminController::class, 'layDuLieuThongKe'])->name('load.dashboard');
+    
+Route::get('/orders', [AdminController::class, 'listOrders'])->name('orders.list');
+
+Route::post('/orders/update', [AdminController::class, 'update'])->name('orders.update');
+Route::get('/orders/delete/{id}', [AdminController::class, 'delete'])->name('orders.delete');
+Route::put('/orders/update-status/{id}', [AdminController::class, 'updateOrderStatus'])->name('orders.updateStatus');
+Route::get('/orders/{id}/detail', [AdminController::class, 'orderDetail'])->name('orders.detail');
+
+Route::get('/customers', [AdminController::class, 'listCustomers'])->name('customers.list');
+Route::get('/customers/orders/{user_id}', [AdminController::class, 'listOrdersByUser'])->name('customers.orders');
+
+Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
 // Hiển thị form sửa
 Route::get('admin/products/{id}/edit', 'App\Http\Controllers\ProductsController@edit')->name('products.edit');
 
@@ -111,7 +128,6 @@ Route::put('admin/products/{id}', 'App\Http\Controllers\ProductsController@updat
 // Xử lý xoá sản phẩm
 Route::delete('admin/products/{id}', 'App\Http\Controllers\ProductsController@destroy')->name('products.destroy');
 Route::get('admin/products', 'App\Http\Controllers\ProductsController@index')->name('products.index');
-
 
 
 //Footer

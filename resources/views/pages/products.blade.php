@@ -75,7 +75,13 @@
                             
                         </div>
                         <ul class="product-btns">
-                            <li><a href="#"><i class="fa fa-heart-o"></i> Thêm vào danh sách yêu thích</a></li>
+                            <form method="POST" action="{{ route('wishlistadd') }}" style="display:inline">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $data->id }}">
+                                <button class="add-to-wishlist" type="submit"><i class="fa fa-heart-o">  </i><span
+                                        class="tooltipp"></span></button>
+                            </form>
+                            Thêm vào danh sách yêu thích
 
                         </ul>
 

@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'Trang quản trị')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @stack('styles')
-    {{-- Bootstrap & Icon --}}
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    {{-- Custom CSS --}}
+    
     <style>
         body {
             background: #f1f4f9;
@@ -72,18 +70,32 @@
     <!-- Sidebar -->
     <div class="sidebar p-4">
         <h4 class="text-white mb-4">EGO MOBILE</h4>
-        <a href="#" class="active"><i class="bi bi-speedometer2"></i> Dashboard</a>
-        <a href="{{route('listproducts')}}"><i class="bi bi-box-seam"></i> Sản phẩm</a>
-        <a href="#"><i class="bi bi-cart4"></i> Đơn hàng</a>
-        <a href="#"><i class="bi bi-people-fill"></i> Khách hàng</a>
-        <a href="#"><i class="bi bi-gear-fill"></i> Cài đặt</a>
+        <a href="{{ route('redirect') }}" class="{{ request()->routeIs('redirect') ? 'active' : '' }}">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <a href="{{ route('listproducts') }}" class="{{ request()->routeIs('listproducts') ? 'active' : '' }}">
+            <i class="bi bi-box-seam"></i> Sản phẩm
+        </a>
+
+        <a href="{{ route('orders.list') }}" class="{{ request()->routeIs('orders.list') ? 'active' : '' }}">
+            <i class="bi bi-cart4"></i> Đơn hàng
+        </a>
+
+        <a href="{{ route('customers.list') }}" class="{{ request()->routeIs('customers') ? 'active' : '' }}">
+            <i class="bi bi-people-fill"></i> Khách hàng
+        </a>
+
+        <a href="{{ route('settings') }}" class="{{ request()->routeIs('settings') ? 'active' : '' }}">
+            <i class="bi bi-gear-fill"></i> Cài đặt
+        </a>
+
     </div>
 
     <!-- Content -->
     <div class="flex-grow-1">
         <div class="topbar">
             <span>Chào mừng bạn đến với trang quản trị!</span>
-            <span><i class="bi bi-globe"></i> Tiếng Việt &nbsp;
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-decoration-none text-dark dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
@@ -100,8 +112,12 @@
         </div>
         <div class="p-4">
             @yield('content')
+
+
         </div>
     </div>
 </div>
+@yield('scripts')
+
 </body>
 </html>

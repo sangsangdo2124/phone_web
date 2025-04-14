@@ -28,7 +28,6 @@ class HomeController extends Controller
             $totalProducts = DB::table('chi_tiet_don_hang')
                 ->join('don_hang', 'chi_tiet_don_hang.ma_don_hang', '=', 'don_hang.ma_don_hang')
                 ->whereDate('don_hang.ngay_dat_hang', $today) // lọc theo ngày hôm nay
-                ->where('don_hang.tinh_trang', 1) // chỉ đơn đã xử lý
                 ->sum('chi_tiet_don_hang.so_luong');
             
     
@@ -39,7 +38,6 @@ class HomeController extends Controller
 
             $CustomersToday = DB::table('don_hang')
             ->whereDate('ngay_dat_hang', $today)
-            ->where('tinh_trang', 1) // chỉ đơn đã xử lý
             ->distinct('user_id')
             ->count('user_id');
             // Truyền dữ liệu vào view

@@ -22,7 +22,7 @@
                 <tr>
                     <td>{{ $order->ma_don_hang }}</td>
                     <td>{{ $order->ngay_dat_hang }}</td>
-                    <td>{{ $order->hinh_thuc_thanh_toan }}</td>
+                    <td>{{ $order->hinh_thuc_thanh_toan == 1 ? 'Tiền mặt' : ($order->hinh_thuc_thanh_toan == 2 ? 'Chuyển khoản' : 'Không xác định') }}</td>
                     <td>{{ $order->tinh_trang == 1 ? 'Đang vận chuyển' : 'Đã giao' }}</td>
                 </tr>
                 @endforeach

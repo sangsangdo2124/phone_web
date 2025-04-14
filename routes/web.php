@@ -5,7 +5,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\StoreController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,7 +29,7 @@ require __DIR__.'/auth.php';
 //SANG SANG
 Route::get('/redirect',[HomeController::class,'redirect'] )->name('redirect');
 
-Route::get('/','App\Http\Controllers\HomeController@index');// Hiển thị section sản phẩm mới nhất trong trang chủ
+Route::get('/','App\Http\Controllers\HomeController@new');// Hiển thị section sản phẩm mới nhất trong trang chủ
 
 Route::get('/category/{categoryId}', [CategoryController::class, 'show']);  // Hiển thị sản phẩm theo danh mục
 
@@ -38,10 +37,12 @@ Route::get('/allproducts','App\Http\Controllers\StoreController@all')->name('all
 
 Route::get('/quick-view/{id}', [ProductsController::class, 'quickView']);//Hiển thị Quick View
 
-Route::get('/store', 'App\Http\Controllers\StoreController@index')->name('store.index');
 
-Route::get('/store', [StoreController::class, 'index'])->name('store.index');  //này chưa có viết hàm
+Route::get('/store', [StoreController::class, 'index'])->name('pages.allproducts');  //này chưa có viết hàm
 
+//Route::get('/store', 'App\Http\Controllers\StoreController@index')->name('store.index');
+
+//Route::get('/store', [StoreController::class, 'index'])->name('store.index');  //này chưa có viết hàm
 
 
 Route::get('/thanks', function () {
@@ -87,6 +88,7 @@ Route::post('/saveaccountinfo','App\Http\Controllers\AccountController@saveaccou
 
 Route::get('/lichsumuahang','App\Http\Controllers\AccountController@lichsumuahang')->middleware('auth')->name('lichsumuahang');
 
+Route::get('/san-pham', [CategoryController::class, 'filterByLoai']);
 
 
 

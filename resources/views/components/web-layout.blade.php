@@ -105,10 +105,11 @@
 					<!-- SEARCH BAR -->
 					<div class="col-md-6">
 						<div class="header-search">
-							<form>
-								<input class="input" placeholder="Bạn cần tìm gì?">
-								<button class="search-btn">Tìm kiếm</button>
-							</form>
+						<form action="{{ route('pages.allproducts') }}" method="GET">
+    						<input class="input" type="text" name="search" placeholder="Bạn cần tìm gì?" value="{{ request('search') }}">
+    						<button type="submit" class="search-btn">Tìm kiếm</button>
+						</form>
+
 						</div>
 					</div>
 					<!-- /SEARCH BAR -->
@@ -182,7 +183,7 @@
 						<ul class="dropdown-menu">
 							@foreach($categories as $category)
 								<li>
-									<a href="{{ route('store.index', ['category' => $category->id]) }}">
+									<a href="{{ route('pages.allproducts', ['category' => $category->id]) }}">
 										{{ $category->ten_loai_san_pham }}
 									</a>
                 				</li>
@@ -194,7 +195,7 @@
 						<ul class="dropdown-menu">
 							@foreach($brands as $brand)
 								<li>
-									<a href="{{ route('store.index', ['brand' => $brand->id]) }}">
+									<a href="{{ route('pages.allproducts', ['brand' => $brand->id]) }}">
 										{{ $brand->ten_nha_san_xuat }}
 									</a>
 								</li>
@@ -462,7 +463,3 @@ $(document).ready(function() {
 });
 </script>
 <x-quick-view-modal/>
-
-
-
-

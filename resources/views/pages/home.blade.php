@@ -1,8 +1,7 @@
 <x-web-layout>
-	<x-slot name='title'>
-		Trang chủ
-	</x-slot>
-
+    <x-slot name='title'>
+        Trang chủ
+    </x-slot>
 	<!-- HOT DEAL SECTION -->
 	<div id="hot-deal" class="section">
 		<!-- container -->

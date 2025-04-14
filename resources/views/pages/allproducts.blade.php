@@ -35,13 +35,13 @@
                                 </div>
                             </div>
                             <div class="add-to-cart d-flex flex-column gap-2" style="min-height: 90px;">
-								<form method="POST" action="{{ route('Muangay') }}">
-									@csrf
-									<input type="hidden" name="id" value="{{ $product->id }}">
-									<button type="submit" class="add-to-cart-btn add-product">Mua ngay</button>
-								</form>
-								<button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng</button>
-							</div>
+                              <form method="POST" action="{{ route('Muangay') }}">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $product->id }}">
+                                <button type="submit" class="add-to-cart-btn add-product">Mua ngay</button>
+                              </form>
+                              <button class='add-to-cart-btn add-product' sp_id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng</button>
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -57,30 +57,3 @@
 
 
 </x-web-layout>
-<script>
-$(document).ready(function() {
-    // Khi người dùng nhấn nút "Quick View"
-    $('.quick-view').on('click', function() {
-        var productId = $(this).data('id'); // Lấy id sản phẩm
-
-        // Gửi AJAX request để lấy thông tin sản phẩm
-        $.ajax({
-            url: '/quick-view/' + productId, // Địa chỉ API để lấy dữ liệu sản phẩm
-            method: 'GET',
-            success: function(response) {
-                // Hiển thị thông tin sản phẩm vào modal
-                $('#quick-view-content').html(response);
-                $('#quick-view-modal').show(); // Hiển thị modal
-            },
-            error: function() {
-                alert('Không thể tải thông tin sản phẩm.');
-            }
-        });
-    });
-
-    // Đóng modal khi nhấn vào dấu "X"
-    $('.close').on('click', function() {
-        $('#quick-view-modal').hide();
-    });
-});
-</script>
